@@ -4,7 +4,7 @@
 class MySolution:
     def dfsGraph(self, num, pairs):
         graph = [[] for _ in range(num)]  # 建立空邻接表 [[],[],[],[],[]] tO(N)
-        visited = [0] * (num + 1)  # 建立空访问表
+        visited = [0] * num  # 建立空访问表
         #visited = [0 for _ in range(num)]
 
         for i, j in pairs:  # 填充邻接表 tO(E)
