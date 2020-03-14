@@ -1,0 +1,34 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+# 判断是否是孤立的
+Class Solution:
+    # 初始化，每一个点都设置为单独的一个组，标记为index
+    groupTag = [i for i in range(n)]  # 即每个i都用其index = i进行标记
+
+    # find操作是为每一个节点找到它的最远祖先，如果节点对应的数值为初始的index的话，证明其依然为isolate，
+    # 如果不是的话，存储的index为其祖先的index，这样就能find其最远祖先
+
+    def find(self, e, groupTag):
+        # isolate
+        if group[e] == e:
+            return [e]
+        # group
+        else:
+            return self.find(groupTag[e], groupTag)
+
+    # Union操作，进来的这两个节点是联通的，union函数是将这两个节点合并成一个组。通过调用find操作，对两个节点找到其祖先
+    # 然后如果祖先相同的话，证明这两个节点已经再一个组里，跳过；如果不是的话，将第二个节点的祖先设置为第一个节点
+    def union(self, i, j, x, y, groupTag, n):
+        index1 = i * n + j
+        index2 = x * n + y
+        root1 = self.find(index1, groupTag)
+        root2 = self.find(index2, groupTag)
+        # already unioned
+        if root1 == root2:
+            return
+        else:
+            groupTag[root2] = root1  # 连接新点
+
+x = Solution()
+x.bfsGraph(5, [[0,1], [0,2], [0,3], [1,4]])

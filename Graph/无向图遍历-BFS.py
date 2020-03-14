@@ -4,7 +4,7 @@
 # BFS
 # 以无向图举例
 from collections import deque
-class MySolution:
+class Solution:
     def bfsGraph(self, num, pairs):
         graph = [[] for _ in range(num)]  # 建立空邻接表 tO(N)
         visited = [0 for _ in range(num)]  # 建立空访问表
@@ -28,5 +28,5 @@ class MySolution:
     
     #def isCyclic(self, n, pairs):  # return T for cyclic, False for acyclic
         
-x = MySolution()
+x = Solution()
 x.bfsGraph(5, [[0,1], [0,2], [0,3], [1,4]])
