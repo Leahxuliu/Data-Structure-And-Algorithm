@@ -24,7 +24,7 @@ class Solution:
 
 
     def dfs(self, graph, visit, index):  # when repeat, return True有环or False无环
-        if visit[index] == 0:
+        if visit[index] == 0:  # 关键条件，遇到正在visited的node --> 环
             return True
         if visit[index] == 1: # 只访问未访问的，相当于剪枝
             return False
