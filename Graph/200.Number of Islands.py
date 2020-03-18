@@ -26,6 +26,9 @@ corner case: none grid --> 0
 class Solution:
     def numIslands(self, grid) -> int:
         a =1
+        a
+        bin
+        
 
 x = Solution
 print(x.numIslands([["1","1","1","1","0"],["1","1","0","1","0"],["1","1","0","0","0"],["0","0","0","0","0"]]))
