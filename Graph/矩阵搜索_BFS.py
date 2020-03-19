@@ -19,7 +19,8 @@ class MySolution:
         for i in range(len(grid)):
             for j in range(len(gird[i])):
                 if grid[i][j] == 1 and visited[i][j] == 0:
-                    queue.append([0, 0])  # 0行0列
+                    queue.append([i, j])  # 0行0列
+                    visited[i][j] = 1
                     while queue:
                         r, c = queue.popleft()  # row 行, cloumn 列
                         if r - 1 >= 0 and visited[r - 1][c] == 0:

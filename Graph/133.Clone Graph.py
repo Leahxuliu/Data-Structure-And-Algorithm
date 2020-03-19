@@ -79,7 +79,6 @@ class Solution:
 
 '''
 更正
-在放入字典的时候，就让其具备node的性质
 '''
 
 from collections import deque
