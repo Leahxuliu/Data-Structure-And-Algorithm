@@ -25,7 +25,7 @@ class Solution:
             if root1 == root2:
                 pass
             else:
-                groupTag[root2] = root1  # 连接新点
+                groupTag[root2] = root1  # 连接新点 不一定链接是的i与j，可能是i或者j的根相连
                 connect += 1  # 扩展次数，不包括环的 比如 0-1-2， 三个数，两次扩展
         return n - connect  # 群的个数 = n - 扩展次数； 因为当所有node都相连（不包含环）需要n-1个扩展线，也就是connct的值，没增加一个群，也就是减少一个connect
         
