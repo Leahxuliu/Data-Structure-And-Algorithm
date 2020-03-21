@@ -66,7 +66,7 @@ class Solution:
 '''
 DFS
 '''
-
+'''
 class Solution:
     def countComponents(self, n: int, edges: List[List[int]]) -> int:
         graph = [[] for _ in range(n)]
@@ -91,7 +91,7 @@ class Solution:
                 group += 1
         
         return group
-
+'''
 
 
 x = Solution()

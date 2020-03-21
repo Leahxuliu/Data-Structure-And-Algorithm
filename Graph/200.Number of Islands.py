@@ -29,7 +29,7 @@ corner case: none grid --> 0
 dfs
 把dfs写在里面，写法会更加便捷
 '''
-'''
+
 class Solution:
     def numIslands(self, grid):
         if not grid:
@@ -55,7 +55,7 @@ class Solution:
         self.dfs(i, j-1, visited, grid)
         self.dfs(i, j+1, visited, grid)
         return 
-'''
+
 '''
 BFS
 '''
