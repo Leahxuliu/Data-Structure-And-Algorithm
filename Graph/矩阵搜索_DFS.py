@@ -23,12 +23,12 @@ class MySolution:
         return
         
     def dfs(self, i, j, visited, grid):  # i: 行; j: 列
-        if i < 0 or j <0 or i >= len(grid) - 1 or j >= len(grid[0]) - 1 or visited[i][j] == 1:  # 结束条件
+        if i < 0 or j <0 or i > len(grid) - 1 or j > len(grid[0]) - 1 or visited[i][j] == 1:  # 结束条件
             return
 
         # set visited
         visited[i][j] = 1
-        self.dfs(i - 1, j, visited, grid)  # 左走一格
-        self.dfs(i + 1, j, visited, grid)  # 右走一格
-        self.dfs(i, j - 1, visited, grid)  # 上走一格
-        self.dfs(i, j + 1, visited, grid)  # 下走一格
+        self.dfs(i - 1, j, visited, grid)  # 上走一格
+        self.dfs(i + 1, j, visited, grid)  # 下走一格
+        self.dfs(i, j - 1, visited, grid)  # 左走一格
+        self.dfs(i, j + 1, visited, grid)  # 右走一格
