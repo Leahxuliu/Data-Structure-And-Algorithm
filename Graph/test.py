@@ -1,37 +1,25 @@
-from collections import deque, defaultdict
 class Solution:
-    def validTree(self, n, edges) -> bool:
-        if not n:
-            return False
-        if n == 1:
-            return True
-        if not edges:
-            return False
-        if n != len(edges) + 1:
-            return False
-
-        visited = [0] * n
-        graph = defaultdict(set)
-        queue = deque()
+    def twoSum(self, numbers, target):
+        if numbers == None:
+            return []
         
-        for i, j in edges:
-            graph[i].add(j)
-            graph[j].add(i)
-            
-        for i in range(n):
-            if visited[i] == 0:
-                queue.append([i,-1])
-            
-            while queue:
-                index, parent = queue.popleft()
-                visited[index] = 1
-                
-                for out_index in graph[index]:
-                    if visited[out_index] == 0:
-                        queue.append([out_index, index])
-                    elif out_index != parent:
-                        return False
-        return True
+        def find(T, arr):
+            l, r = 0, len(arr) - 1
+            while l <= r:
+                mid = l + (r - l)//2
+                if T == arr[mid]:
+                    return mid
+                elif T > arr[mid]:
+                    l = mid + 1
+                elif T < arr[mid]:
+                    r = mid - 1
+            return -1
+        
+        for i in range(len(numbers) - 1):
+            new_T = target - numbers[i]
+            index = find(new_T, numbers[i+1:])
+            if index != -1:
+                return [i+1, (i+1+index+1)]
 
 x = Solution()
-print(x.validTree(5,[[1,2],[0,3],[4,3],[0,4]]))
+print(x.twoSum([2,7,11,15],9))           
