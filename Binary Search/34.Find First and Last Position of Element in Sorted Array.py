@@ -26,6 +26,8 @@ corner case: None, 最小值比target大，最大值要比target小
     利用while l<=r这个条件
     在target数前和数后建立一个虚拟数的概念
     找到这个虚拟数的位置
+    第一个位置：nums[l]==target
+    最后一个位置：nums[r]==target
     比如nums = [5,7,7,8,8,10], target = 8
     开始：也就是找到第一个比4要小的最大值，return l
     结束：也就是找到第一个比4要大的最小值，return r
@@ -36,3 +38,47 @@ corner case: None, 最小值比target大，最大值要比target小
 
 '''
 
+class Solution:
+    def searchRange(self, nums, target):
+        if not nums:  # corner case
+            return [-1, -1]
+
+        if target < nums[0] or target > nums[-1]:
+            return [-1, -1]
+        
+        first = self.findFirst(nums, target)
+        last = self.findLast(nums, target)
+        return [first, last]
+        
+    def findFirst(self, nums, target):
+        l, r = 0, len(nums) - 1
+        while l <= r:
+            mid  = l + (r - l) // 2
+            if nums[mid] == target:
+                r = mid - 1
+            elif nums[mid] > target:
+                r = mid - 1
+            elif nums[mid] < target:
+                l = mid + 1
+        if nums[l] == target:
+            return l
+        else:
+            return -1
+                
+    def findLast(self, nums, target):
+        l, r = 0, len(nums) - 1
+        while l <= r:
+            mid  = l + (r - l) // 2
+            if nums[mid] == target:
+                l = mid + 1
+            elif nums[mid] > target:
+                r = mid - 1
+            elif nums[mid] < target:
+                l = mid + 1
+        if nums[r] == target:
+            return r
+        else:
+            return -1
+
+x = Solution()
+print(x.searchRange([5,7,7,8,8,10], 8))
