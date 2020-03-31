@@ -8,17 +8,17 @@ class TreeNode:
         self.right = None
 
 '''
-一定是成为left child 或者right child，除了root=None的情况
+成为left child 或者right child，除了root=None的情况
 所以插入一个新的节点时，关键点找到父节点
 '''
 
 class BST:
-    # 方法一 BFS
+    # 方法一 迭代 iterative
     def insertIteration(self, rrot, target):  # return root with inserted target
         if not root:  # corner case
             return TreeNode(target)  # 成为新的BST，len只有一
 
-        res = root
+        res = root  # 复制树root的地址，root内部会跟着发生改变，题目要求输出整个tree，也就是tree的root
         while root:
             if root.val > target:  
                 if root.left is None:  # 成为这个node的left child
@@ -34,8 +34,7 @@ class BST:
                 else:
                     root = root.right
 
-
-    # 方法二 DFS
+    # 方法二 递归
     def insert(self, root, target):
         if not root:  # corner case + ending条件
             return TreeNode(target)

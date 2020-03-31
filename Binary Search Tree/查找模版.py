@@ -3,7 +3,7 @@
 
 
 '''
-若布局良好，则是O(log(n))
+若布局良好，则是O(log(n)) 也就是树的高度
 若是skewed tree，node分布在一条直线上，查找时间为 O(n) worst case
 '''
 
@@ -28,6 +28,7 @@ class BST:
                 root = root.right
         return None
     
+    # 递归的速度更加快    
     def findDFS(self, root, target):
         if not root:
             return None
@@ -39,3 +40,5 @@ class BST:
         else:
             return self.findDFS(root.right, target)
     
+
+        
