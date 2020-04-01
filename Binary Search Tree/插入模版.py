@@ -10,6 +10,12 @@ class TreeNode:
 '''
 成为left child 或者right child，除了root=None的情况
 所以插入一个新的节点时，关键点找到父节点
+node比target大，看left是不是空的，左走找左，大左左
+node比target小，看right是不是空的，右走找右，小右右
+
+技巧：
+把root(node)当作中心轴，数轴从左到右，从小到大
+看作是二分搜索
 '''
 
 class BST:
