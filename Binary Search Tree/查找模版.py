@@ -28,17 +28,31 @@ class BST:
                 root = root.right
         return None
     
-    # 递归的速度更加快    
-    def findDFS(self, root, target):
+    def findDFS2(self, root, target):
         if not root:
             return None
         if root.val == target:
             return root
         
         if target < root.val:
-            return self.findDFS(root.left, target)
+            return self.findDFS2(root.left, target)
         else:
-            return self.findDFS(root.right, target)
+            return self.findDFS2(root.right, target)
     
 
-        
+if __name__ == "__main__":
+    Node1 = TreeNode(4)
+    Node2 = TreeNode(1)
+    Node3 = TreeNode(6)
+    Node4 = TreeNode(5)
+    Node5 = TreeNode(8)
+
+    Node3.left = Node4
+    Node3.right = Node5
+    Node1.left = Node2
+    Node1.right = Node3
+    
+    # print(Node1)
+    root = Node1
+    x = BST()
+    print(x.findDFS2(root,5))
