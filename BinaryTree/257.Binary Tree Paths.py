@@ -72,3 +72,28 @@ class Solution:
                 queue.append([node.right, path])
         
         return path_all
+    
+    
+# 回溯
+class Solution:
+    def binaryTreePaths(self, root: TreeNode) -> List[str]:
+        if root == None:
+            return 
+            
+        def helper(root, path):
+            if root == None:
+                return 
+            
+            if root.left == None and root.right == None:
+                all_path.append('->'.join(path[:]))
+                return all_path
+                
+            for node in (root.left, root.right):
+                if node:
+                    path.append(str(node.val))
+                    helper(node, path)
+                    path.pop()
+                
+        all_path = []
+        helper(root, [str(root.val)])
+        return all_path
