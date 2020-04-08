@@ -25,20 +25,71 @@
 
     # 如果str_a整个都是回文的话，比如len(str_a) = 5, 遍历过的点：[2,2]-->[1,3]-->[0,4]
 
+'''
 
-4. 输出输入以及边界条件：
-input: 
-output: 
-corner case: 
 
-5. 空间时间复杂度
-    时间复杂度：O(n^2)
-    空间复杂度：O(n^2)
 
 '''
+递归
+time  O(2**n)
+Time Limit Exceeded
+'''
+class Solution:
+    def longestPalindromeSubseq(self, s: str) -> int:
+        if s == '':
+            return 0
+        
+        def dfs(i, j):
+            if i == j:
+                return 1
+            if i > j:
+                return 0
+            if s[i] == s[j]:
+                return dfs(i+1, j-1) + 2
+            
+            else:
+                return max(dfs(i,j-1), dfs(i+1,j))
+        
+        return dfs(0, len(s) - 1)
+
+
+'''
+递归+memo
+好处：不用考虑遍历方向,有的时候比dp也快
+时间复杂度：O(N) 最好情况  O(N**2) 最坏情况
+空间复杂度：O(N)
+'''
+class Solution2:
+    def longestPalindromeSubseq2(self, s: str) -> int:
+        if s == '':
+            return 0
+        
+        memo = {}
+
+        def dfs(i, j):
+            if (i, j) in memo:
+                return memo[(i, j)]
+
+            if i == j:
+                return 1
+            if i > j:
+                return 0
+            if s[i] == s[j]:
+                memo[(i,j)] = dfs(i+1, j-1) + 2
+            else:
+                memo[(i,j)] = max(dfs(i,j-1), dfs(i+1,j))
+            return memo[(i, j)]
+
+        return dfs(0, len(s) - 1)
+
+
+
+
 
 '''
 dp + table
+时间复杂度：O(n^2)
+空间复杂度：O(n^2)
 '''
 class Solution:
     def longestPalindromeSubseq(self, s: str) -> int:
@@ -62,21 +113,10 @@ class Solution:
         return dp[0][n-1]
 
 
-x = Solution()
-print(x.longestPalindromeSubseq('cbbd'))
-
-'''
-dp+memo
-好处：不用考虑遍历方向
-'''
-
-
-'''
-递归
-'''
+x = Solution2()
+print(x.longestPalindromeSubseq2('cbbdc'))
 
 
 
-'''
-递归+memo
-'''
+
+
