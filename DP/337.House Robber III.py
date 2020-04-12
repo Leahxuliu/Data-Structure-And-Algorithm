@@ -5,6 +5,7 @@
 # @FileName: 337.House Robber III.py 
 
 '''
+题意理解有误啊啊啊啊啊
 二叉树 按层遍历
 每一层为一个dp[i]
 
@@ -68,12 +69,10 @@ class Solution:
                 
 
 '''
-方法2
+parent 与child是相邻点
+[2,1,3,null,4]，3与4不是相邻点
+重写状态转移方程：
+dp[i]表示本层的最大值
+dp[i] = max(不抢本层root, 抢本层root)
 '''
 
-
-
-'''
-方法3
-'''
-                
