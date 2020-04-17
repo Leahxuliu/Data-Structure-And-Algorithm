@@ -28,6 +28,9 @@ step2  从最左边 i+1（最小值）和最右边 len(nums)-1（最大值）两
 
 时间复杂度：O(n^2)
 疑问点： 为什么不是nlogn?  for循环 * 二分搜索
+因为这里的这个不是二分搜索，是左右指针
+二分搜索的时候，是跳跃的，不是每一个数字都会被遍历到
+这里的左右往中间走，最坏情况的时候，每个数字都会被遍历到
 '''
 
 '''
@@ -61,7 +64,6 @@ class Solution:
 这里要注意数组的去重，去重过程包含了遍历，也会增加时间复杂度，所以我进行了优化，
 对于排序完成的数组来说，只要判断下相邻的数是否相等，如果相等就直接移动指针即可，这就完成了去重。
 '''
-# 依旧超时
 class Solution:
     def threeSum(self, nums: List[int]) -> List[List[int]]:
         nums.sort()
@@ -92,3 +94,10 @@ class Solution:
                     while l < r and nums[r + 1] == nums[r]:  # 易错 l是l-1， r是r+1
                         r -= 1
         return res
+
+
+'''
+res不要是list，set
+set的时间复杂度是O(1)!!!!
+小丁的方法过于繁琐
+'''
