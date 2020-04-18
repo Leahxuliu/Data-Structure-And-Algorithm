@@ -64,4 +64,18 @@ class Solution:
 
 '''
 方法2
+判读该node的left与right的depth差是否超过1
 '''
+class Solution:
+    def isBalanced(self, root: TreeNode) -> bool:
+        def DFS(root, depth):
+            if root == None:
+                return depth  # retuen 0是错误的，这里不仅仅是corner case还是ending条件
+            return max(DFS(root.left, depth + 1), DFS(root.right, depth + 1))
+        
+        if root == None:
+            return True
+        if abs(DFS(root.right, 0) - DFS(root.left, 0)) > 1:
+            return False
+        
+        return self.isBalanced(root.left) and self.isBalanced(root.right)

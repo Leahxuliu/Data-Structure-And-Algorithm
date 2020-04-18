@@ -32,8 +32,7 @@ corner case:
 
 '''
 方法一  并查集
-空间复杂度：
-时间复杂度：
+time O(N) space O(N)
 '''
 
 class Solution:
@@ -69,6 +68,17 @@ class Solution:
 DFS
 visited [0,1] parent_index
 无环：其访问过的节点有且只有一个，并且是其节点的上一个节点（parent_index)
+
+时间复杂度：
+vetex: 角
+edge：边
+建立邻接表的时候是E，然后扫各个点是V
+O(E + V)
+
+空间复杂度：
+建立visited用了V
+建立邻接表用E
+O(E + V)
 '''
 
 class Solution:
@@ -123,6 +133,7 @@ class Solution:
 
         visited = [0] * n
         graph = defaultdict(set)
+        # graph = [[] for _ in range(n)]
         queue = deque()
         
         for i, j in edges:

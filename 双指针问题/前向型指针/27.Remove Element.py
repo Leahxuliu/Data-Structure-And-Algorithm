@@ -18,6 +18,9 @@
     arr[j] == val --> j += 1
     arr[j] != val --> i = i + 1, j = j + 1, nums[i] = nums[j]
 
+    i是结果可放的位置
+    但j是符合要求的值时，放到i上
+
 4. 输出输入以及边界条件：
 input: 
 output: 

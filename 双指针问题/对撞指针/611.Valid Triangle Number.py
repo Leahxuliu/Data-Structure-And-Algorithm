@@ -29,7 +29,6 @@ corner case:
 
 '''
 错误
-不会
 '''
 class Solution:
     def triangleNumber(self, nums: List[int]) -> int:
@@ -46,8 +45,34 @@ class Solution:
             
             while l < r:
                 if nums[i] + nums[l] > nums[r]:
-                    res += 1
+                    res += r - l
                     l += 1
                 else:
                     r -= 1
+        return res
+
+
+'''
+更正
+'''
+
+class Solution:
+    def triangleNumber(self, nums: List[int]) -> int:
+        if nums == []:
+            return 0
+        
+        n = len(nums)
+        nums.sort()
+        res = 0
+        
+        for i in range(2, n):
+            l = 0
+            r = i - 1
+            
+            while l < r:
+                if nums[l] + nums[r] > nums[i]:
+                    res += r - l
+                    r -= 1
+                else:
+                    l += 1
         return res
