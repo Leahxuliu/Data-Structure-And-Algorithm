@@ -36,10 +36,12 @@ union-find
 
 class Solution:
     def countComponents(self, n, edges):
+        #if n == 0 or edges == []:  # 错误 n = 1, edges = []的时候，不应该输出0，而应该是1
+        #    return 0  # 这里写成n，就对了
         if n == 0:
             return 0
         if edges == []:
-            return n
+            return n  # 易错，不是0是n
         
         groupTag = [i for i in range(n)]
         
@@ -66,7 +68,7 @@ class Solution:
 '''
 DFS
 '''
-'''
+
 class Solution:
     def countComponents(self, n: int, edges: List[List[int]]) -> int:
         graph = [[] for _ in range(n)]
@@ -91,10 +93,40 @@ class Solution:
                 group += 1
         
         return group
-'''
-
 
 x = Solution()
 print(x.countComponents(4,[[2,3],[1,2],[1,3]]))
 
 
+'''
+BFS
+'''
+
+from collections import deque
+class Solution:
+    def countComponents(self, n: int, edges: List[List[int]]) -> int:
+        if n == 0 or edges == []:
+            return n
+       
+        visited = [0] * n
+        graph = [[] for _ in range(n)]
+        
+        for i, j in edges:
+            graph[i].append(j)
+            graph[j].append(i)
+        
+        group = 0
+        queue = deque()
+        for i in range(n):
+            if visited[i] == 0:
+                queue.append(i)
+                group += 1
+                
+            while queue:
+                index = queue.popleft()
+                visited[index] = 1
+                for out in graph[index]:
+                    if visited[out] == 0:
+                        queue.append(out)
+            
+        return group
