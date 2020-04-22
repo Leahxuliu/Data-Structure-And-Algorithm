@@ -193,7 +193,7 @@ class Solution:
             return False
         if matrix == [[]]:
             return False
-        if target is None:
+        if target == 0:
             return False
 
         i = len(matrix) - 1

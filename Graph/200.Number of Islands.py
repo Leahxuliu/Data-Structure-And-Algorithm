@@ -78,7 +78,7 @@ class Solution:
                         r, c = queue.popleft()
                         if r - 1 >= 0  and visited[r-1][c] == 0 and grid[r-1][c] == '1':
                             queue.append([r - 1, c])
-                            visited[r - 1][c] = 1  # 必须要写，如果不写的话，会超时
+                            visited[r - 1][c] = 1  # 必须要写，如果不写的话，会超时, grid大的时候，被加到queue里面了，但是还没有popleft出来，还可以继续被加，出现无数重复
                         if r + 1 <= len(grid) -1 and visited[r+1][c] == 0 and grid[r+1][c] == '1':
                             queue.append([r + 1, c])
                             visited[r + 1][c] = 1

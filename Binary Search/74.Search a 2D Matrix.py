@@ -23,7 +23,8 @@ corner case:
 
 
 4. 时间空间复杂度：
-    
+    时间复杂度 O(log(MN))
+    空间复杂度 O(1)
 
 '''
 
@@ -45,4 +46,67 @@ class Solution:
                 r = mid - 1
             else:
                 l = mid + 1
+        return False
+
+
+'''
+按行binary search
+m是行数，n是一行内的个数
+时间复杂度: O(mlongn)
+空间复杂度：O(n) 
+'''
+class Solution:
+    def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
+        if matrix == [[]] or matrix == []:
+            return False
+        if target < matrix[0][0] or target > matrix[-1][-1]:
+            return False
+        
+        m = len(matrix)
+        n = len(matrix[0])
+        
+        def find(i):
+            arr = matrix[i]
+            l, r = 0, n - 1
+            while l <= r:
+                mid = l + (r - l) // 2
+                if arr[mid] == target:
+                    return True
+                if arr[mid] > target:
+                    r = mid - 1
+                elif arr[mid] < target:
+                    l = mid + 1
+            return False
+            
+            
+        
+        for i in range(m):
+            if matrix[i][0] <= target <= matrix[i][-1]:
+                if find(i) == True:
+                    return True
+        return False
+
+'''
+按行binary search
+m是行数，n是一行内的个数
+时间复杂度: O(mlongn)
+空间复杂度：O(1)
+'''
+class Solution:
+    def searchMatrix(self, matrix, target):
+        if matrix == [] or matrix == [[]]:
+            return False
+        
+        for i in range(len(matrix)):
+            if matrix[i][0] <= target <= matrix[i][-1]:
+
+                l, r = 0, len(matrix[i]) - 1
+                while l <= r:
+                    mid = l + (r - l)//2
+                    if matrix[i][mid] == target:
+                        return True
+                    if matrix[i][mid] > target:
+                        r = mid - 1
+                    else:
+                        l = mid + 1
         return False

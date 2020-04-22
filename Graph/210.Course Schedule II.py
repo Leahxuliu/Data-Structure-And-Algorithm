@@ -109,7 +109,7 @@ class Solution:
                 if indegree[elem] == 0:
                     queue.append(elem)
         
-        if indegree == [0] * numCourses:
+        if indegree == [0] * numCourses:  # 本题，还需要判断是否有环
             return path  # 易错点，这里不需要path[::-1]
         else:
             return []

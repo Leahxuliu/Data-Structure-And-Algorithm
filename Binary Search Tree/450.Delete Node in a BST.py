@@ -64,3 +64,57 @@ class Solution:
         while root.left:
             root = root.left
         return root.val
+
+'''
+BFS 
+错误
+'''
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def deleteNode(self, root: TreeNode, key: int) -> TreeNode:
+        if root == None or key == 0:
+            return 
+        
+        def find(root):
+            node = root.left
+            while node.right:
+                node = node.right
+            return node.val
+        
+        res = root
+        
+        while root:
+            if root.val == key:
+                if root.left == None and root.right == None:
+                    root = None  # 错误，res里面，这个node没有变成None
+                    return res
+                
+                elif root.left == None:
+                    root.val = root.right.val
+                    root.right = None
+                    return res
+                
+                elif root.right == None:
+                    root.val = root.left.val
+                    root.left = None
+                    return res
+                
+                else:
+                    pre = find(root)
+                    root.val = pre
+                    key = pre
+                    root = root.left
+            
+            elif root.val > key:
+                root = root.left
+            
+            elif root.val < key:
+                root = root.right
+        
+        return res

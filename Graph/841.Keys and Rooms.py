@@ -95,6 +95,28 @@ class Graph:
         return visited == [1] * len(rooms)
 
 
+class Solution:
+    def canVisitAllRooms(self, rooms: List[List[int]]) -> bool:
+        if rooms == [[]] or rooms == [] or len(rooms) == 1:
+            return True
+        
+        visited = [0] * len(rooms)
+        def dfs(index):
+            if visited[index] == 1:
+                return 
+            visited[index] = 1
+            for each_key in rooms[index]:
+                if visited[each_key] != 1:
+                    dfs(each_key)
+            
+        island_numb = 0
+        for i, v in enumerate(visited):
+            if v == 0:
+                dfs(i)
+                island_numb += 1
+        return island_numb == 1
+
+
 '''
 方法2
 bfs
@@ -126,6 +148,29 @@ class Solution:
         return visited == [1] * len(rooms)
 
 
+from collections import deque
+class Solution:
+    def canVisitAllRooms(self, rooms: List[List[int]]) -> bool:
+        if rooms == [] or rooms == [[]] or len(rooms) == 1:
+            return True
+        
+        visited = [0] * len(rooms)
+        
+        queue = deque()
+        island_num = 0
+        for i, v in enumerate(visited):
+            if v == 0:
+                queue.append(i)
+                island_num += 1
+                
+                while queue:
+                    index = queue.popleft()
+                    visited[index] = 1
+                    for out in rooms[index]:
+                        if visited[out] != 1:
+                            queue.append(out)
+        return island_num == 1
+        
 
 x = Graph()
 print(x.canVisitAllRooms([[1],[2],[3],[]]))

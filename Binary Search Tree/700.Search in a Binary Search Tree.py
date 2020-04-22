@@ -39,6 +39,27 @@ class Solution:
         return None
 
 
+from collections import deque
+class Solution:
+    def searchBST(self, root: TreeNode, val: int) -> TreeNode:
+        if root == None:
+            return 
+        
+        queue = deque()
+        queue.append(root)
+        
+        while queue:
+            node = queue.popleft()
+            if node == None:  # 不能忘记了！易错
+                return
+            if node.val == val:
+                return node
+            if node.val > val:
+                queue.append(node.left)
+            else:
+                queue.append(node.right)
+
+
 # 递归的速度更快
 class Solution:
     def searchBST(self, root: TreeNode, val: int) -> TreeNode:
