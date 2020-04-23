@@ -46,6 +46,27 @@ class Solution:
         return path_all
 
 
+class Solution:
+    def binaryTreePaths(self, root: TreeNode) -> List[str]:
+        if root == None:
+            return 
+        
+        def dfs(root, path):
+            
+            if root.left != None:
+                dfs(root.left, path + [str(root.left.val)])
+            if root.right != None:
+                dfs(root.right, path + [str(root.right.val)])                
+                
+            if root.right == None and root.left == None:
+                all_path.append('->'.join(path)) 
+        
+        all_path = []
+        dfs(root, [str(root.val)])
+        
+        return all_path
+
+
 #BFS
 from collections import deque
 class Solution:
