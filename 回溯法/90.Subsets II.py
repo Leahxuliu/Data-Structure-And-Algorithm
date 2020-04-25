@@ -31,25 +31,47 @@ corner case:
 '''
 
 class Solution:
-     def subsetsWithDup(self, nums):
-        res = []
-        temp = []
-        #nums.sort()  # 关键点
-        def backtrack(index, temp):
-            if temp not in res:
-                res.append(temp[:])
-            
-            for i in range(index, len(nums)):
-                temp.append(nums[i])
-                #temp.sort()  # 错误，因为1被调到前面，pop的时候不能被删除
-                backtrack(i + 1, temp)
-                temp.pop()
-            
-            return res
+    def subsetsWithDup(self, nums):
+        if nums == []:
+            return 
         
-        backtrack(0, temp)
-        return res
+        nums.sort()
+        def backtrack(start, path):
+            if path not in all_res:
+                all_res.append(path[:])
+            
+            for i in range(start, len(nums)):
+                path.append(nums[i])
+                backtrack(i+1, path)
+                path.pop()
+
+        all_res = []
+        backtrack(0, [])
+        return all_res
 
 
 x = Solution()
 print(x.subsetsWithDup([4,4,4,1,4]))
+
+
+'''
+错误
+输出：[[],[1],[1,2],[1,2],[2],[2]]
+正确：[[],[1],[1,2],[1,2,2],[2],[2,2]]
+'''
+class Solution:
+    def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
+        if nums == []:
+            return 
+        def backtrack(start, path):
+            all_res.append(path[:])
+            
+            for i in range(start, len(nums)):
+                if nums[i] not in path:
+                    path.append(nums[i])
+                    backtrack(i+1, path)
+                    path.pop()
+
+        all_res = []
+        backtrack(0, [])
+        return all_res

@@ -70,7 +70,7 @@ class Solution:
     def isBalanced(self, root: TreeNode) -> bool:
         def DFS(root, depth):
             if root == None:
-                return depth  # retuen 0是错误的，这里不仅仅是corner case还是ending条件
+                return depth  # return 0是错的; 因为这里的depth是最底层的高度值，不是0
             return max(DFS(root.left, depth + 1), DFS(root.right, depth + 1))
         
         if root == None:

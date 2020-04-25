@@ -75,6 +75,30 @@ class Solution:
         # 当前节点不是叶子，对它的所有孩子节点，递归调用 hasPathSum() 函数
         return self.hasPathSum(root.left,sum-root.val) or self.hasPathSum(root.right,sum-root.val)
 
+'''
+找到所有path
+'''
+class Solution:
+    def hasPathSum(self, root: TreeNode, sum: int) -> bool:
+        if root == None:
+            return False
+        
+        
+        def helper(root, path):
+            if root.left == None and root.right == None:
+                return all_path.append(path + root.val)
+        
+            if root.left != None:
+                helper(root.left, path + root.val)
+            if root.right != None:
+                helper(root.right, path + root.val)
+            
+        all_path = []
+        helper(root, 0)
+        if sum in all_path:
+            return True
+        else:
+            return False
 
 '''
 思路2

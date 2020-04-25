@@ -67,15 +67,15 @@ class Solution:
            worst O(N)
 '''
 
-#wrong
 class Solution:
     def minDepth(self, root: TreeNode) -> int:
         if root == None:
             return 0
-        if root.left == None and root.left == None:
-            return 1+max(self.minDepth(root.left), self.minDepth(root.right))
-        if root.left != None or root.left != None:
-            return 1+min(self.minDepth(root.left), self.minDepth(root.right))
+        if root.left == None or root.right == None:
+            return max(self.minDepth(root.left), self.minDepth(root.right)) + 1
+            # 易错 不是return 1，因为[1,2]的最小depth是2，不是1
+        
+        return min(self.minDepth(root.left), self.minDepth(root.right)) + 1
 
 '''
 思路三
@@ -84,26 +84,54 @@ class Solution:
     3. 层层遍历 --> 第一个叶子节点即为最小深度的叶子节点
     4. 在第一次到达叶子节点时，立马return depth
 '''
-#报错
-#[1,null,2]
 
+
+from collections import deque
+class Solution:
+    def minDepth(self, root: TreeNode) -> int:
+        if not root:  # corner case
+            return 0
+
+        queue = deque()
+        queue.append([root, 1])
+
+        while queue:
+            node, height = queue.popleft()
+            if not node.left and not node.right:
+                return height
+            if node.left:
+                queue.append([node.left, height + 1])
+            if node.right:
+                queue.append([node.right, height + 1])
+
+'''
+BFS
+'''
 from collections import deque
 class Solution:
     def minDepth(self, root: TreeNode) -> int:
         if root == None:
             return 0
+        '''if root.left == None and root.right == None:
+            return 1
+        if root.left == None or root.right == None:
+            return 2'''  # [1,2,null,3,null,4,null,5] 正确是5，但是写了这个，就变成2了
         
         queue = deque()
-        queue.append([root,0])
+        queue.append(root)
+        depth = 0
         
         while queue:
-            node, depth = queue.popleft()
             depth += 1
-
-            if node.left == None and node.right == None:
-                return depth
-
-            if node.left != None:
-                queue.append([node.left, depth])
-            if node.right != None:
-                queue.append([node.right, depth])
+            len_q = len(queue)
+            for i in range(len_q):
+                node = queue.popleft()
+                if node.left == None and node.right == None:
+                    return depth
+                #if node.left == None or node.right == None:
+                #    return depth
+                if node.left != None:
+                    queue.append(node.left)
+                if node.right != None:
+                    queue.append(node.right)
+        return depth

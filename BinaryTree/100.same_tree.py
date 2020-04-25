@@ -28,12 +28,12 @@ class Solution:
     '''
     def isSameTree(self, p, q):
         # p and q are both None
-        if not p and not q:  # p 和 q都已经结束了，没有节点了；或者，这两个树，原本就是空的
+        if not p and not q:  
             return True
         # one of p and q is None
-        if not q or not p:  # p或q，其中一个已经遍历完了，没有节点了；或者，其中一个树，原本就是空的
+        if not q or not p:  
             return False
-        if p.val != q.val:  # 有节点，但是值不同
+        if p.val != q.val:  
             return False
         return self.isSameTree(p.left, q.left) and \
                self.isSameTree(p.right, q.right)
@@ -49,24 +49,27 @@ class Solution:
 
     def isSameTree2(self, p: TreeNode, q: TreeNode) -> bool:
     
-        queue = deque([(p, q)])
+        if p == None and q == None:
+            return True
+        if p == None or q == None:
+            return False
+        
+        queue = deque()
+        queue.append([p, q])
         
         while queue:
-            p_node, q_node = queue.popleft()
-
-            if not p_node and not q_node:
-                return True
-            
-            elif not p_node or not q_node:
+            p, q = queue.popleft()
+            if p == None and q == None:
+                continue  # 关键点，易错！ DFS的时候，会返回到上一层，所以可以return True，但是BFS，这里如果return True了，就截止遍历了！[12,null,72] [12,null,-72]就会报错
+            if p == None or q == None:
                 return False
-            
-            elif p_node.val != q_node.val:
+            if p.val != q.val:
                 return False
-
             else:
-                queue.append((p_node.left, q_node.left))
-                queue.append((p_node.right, q_node.right))
+                queue.append([p.left, q.left])
+                queue.append([p.right, q.right])
         return True
+
 
 if __name__ == '__main__':
     #root = constructTree([1,2,3,4,None,5])

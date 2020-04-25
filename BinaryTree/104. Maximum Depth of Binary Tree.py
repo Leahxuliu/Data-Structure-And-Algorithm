@@ -28,11 +28,25 @@ class Solution:
     def maxDepth(self, root: TreeNode) -> int:
         def DFS(root, depth):
             if root == None:
-                return depth
-            
+                return depth  # return 0是错的; 因为这里的depth是最底层的高度值，不是0
             return max(DFS(root.left, depth + 1), DFS(root.right, depth + 1))
-        
+            '''
+            if root == None:
+                return 0
+            return max(DFS(root.left, depth), DFS(root.right, depth)) + 1
+            '''
         return DFS(root, 0)
+
+
+class Solution:
+    def maxDepth(self, root: TreeNode) -> int:
+        if not root:
+            return 0
+
+        if not root.left and not root.right: 
+            return 1
+
+        return 1 + max(self.maxDepth(root.left), self.maxDepth(root.right)) # get the longest one by df
 
 '''
 方法2
@@ -87,3 +101,20 @@ class Solution:
                     queue.append(node.right)
             res += 1
         return res
+
+
+'''
+错误
+易错
+注意
+'''
+while queue:
+    depth += 1
+    while queue:
+        node = queue.popleft()
+        if node.left != None:
+            queue.append(node.left)
+        if node.right != None:
+            queue.append(node.right)
+
+# depth 永远都是1，因为出来的同时，还在不停的往里面加新的
