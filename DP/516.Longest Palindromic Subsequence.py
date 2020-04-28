@@ -52,6 +52,30 @@ class Solution:
         
         return dfs(0, len(s) - 1)
 
+'''
+从两端往里走
+起始点，i最右端，j最左端
+dp[i][j] = dfs(i+1, j-1) + 1
+dp[i][j] = max(dfs(i+1, j), dfs(i,j-1))  
+
+比上面的递归时间复杂度要大
+'''
+class Solution:
+    def longestPalindromeSubseq(self, s: str) -> int:
+        if s == '':
+            return 0
+        
+        n = len(s)
+        def dfs(i, j):
+            if i > n - 1 or j < 0:
+                return 0
+            
+            if s[i] == s[j]:
+                return dfs(i+1, j-1) + 1
+            else:
+                return max(dfs(i+1, j), dfs(i,j-1))            
+        
+        return dfs(0, n - 1)
 
 '''
 递归+memo
@@ -78,11 +102,31 @@ class Solution2:
                 memo[(i,j)] = dfs(i+1, j-1) + 2
             else:
                 memo[(i,j)] = max(dfs(i,j-1), dfs(i+1,j))
-            return memo[(i, j)]
+            return memo[(i, j)]  # return的是值
 
         return dfs(0, len(s) - 1)
 
-
+class Solution:
+    def longestPalindromeSubseq(self, s: str) -> int:
+        
+        if s == '':
+            return 0
+        
+        n = len(s)
+        memo = {}
+        def dfs(i, j):
+            if (i, j) in memo:
+                return memo[(i, j)]
+            if i > n - 1 or j < 0:
+                return 0
+            
+            if s[i] == s[j]:
+                memo[(i, j)] = dfs(i+1, j-1) + 1
+            else:
+                memo[(i, j)] = max(dfs(i+1, j), dfs(i,j-1))
+            return memo[(i, j)]
+        
+        return dfs(0, n - 1)
 
 
 

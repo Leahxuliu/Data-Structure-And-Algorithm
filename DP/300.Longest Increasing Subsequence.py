@@ -81,9 +81,11 @@ class Solution:
             for j in range(i):
                 if nums[i] > nums[j]:
                     dp[i] = max(dp[j] + 1, dp[i])
-
+        print(dp)
         return max(dp)
 
+X = Solution()
+print(X.lengthOfLIS([1,4,3,4,2,3]))
 
 '''
 二分查找解法
@@ -134,3 +136,38 @@ def lengthOfLIS2(nums):
 
 print(lengthOfLIS2([4,10,4,3,8,9]))
 
+
+class Solution:
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        if nums == []:
+            return 0
+        
+        n = len(nums)
+        piles = 0
+        arr = [0] * n
+        arr[0] = nums[0]
+        
+        def BS(arr, T):
+            l, r = 0, piles
+            while l <= r:
+                mid = l + (r - l) // 2
+                if arr[mid] == T:
+                    return arr
+                elif arr[mid] > T:
+                    r = mid - 1
+                elif arr[mid] < T:
+                    l = mid + 1
+            arr[l] = T
+            return arr
+        
+        for i in nums:
+            if i < arr[0]:  # arr的数字是sort的，从小到大
+                arr[0] = i
+                
+            elif i > arr[piles]:  # 建立新的堆
+                piles += 1
+                arr[piles] = i
+                
+            else:
+                BS(arr, i)  # 改变原来堆上面的数字
+        return piles + 1
