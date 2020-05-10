@@ -61,3 +61,26 @@ class Solution:
         dic[node] = Node(node.val)
         DFS(node)
         return dic[node]
+
+
+class Solution:
+    def cloneGraph(self, node: 'Node') -> 'Node':
+        if node == None:
+            return 
+        
+        info = {}
+        
+        def DFS(root):  
+            if root == None:
+                return 
+            
+            if root not in info:
+                info[root] = Node(root.val)
+            
+            for out in root.neighbors:
+                if out not in info:
+                    DFS(out)
+                info[root].neighbors.append(info[out])
+        
+        DFS(node)
+        return info[node]
