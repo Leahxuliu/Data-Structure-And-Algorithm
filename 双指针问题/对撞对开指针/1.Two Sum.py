@@ -70,6 +70,6 @@ class Solution:
         for i in range(len(nums)):
             temp = target - nums[i]
             if temp in nums_dict:
-                return [nums_dict[temp],i]
+                return [nums_dict[temp],i]  # 易错 
             else:
                 nums_dict[nums[i]] = i
