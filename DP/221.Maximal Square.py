@@ -13,9 +13,9 @@
 
 3. 解题思路：
     dp[i][j]表示当前点为正方形的右下方的顶点时，正方形的最大面积
-    if dp[i][j] == 1:
+    if matrix[i][j] == 1:
         dp[i][j] = min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]) + 1
-    if dp[i][j] == 0:
+    if matrix[i][j] == 0:
         dp[i][j] = 0
 
     base:
