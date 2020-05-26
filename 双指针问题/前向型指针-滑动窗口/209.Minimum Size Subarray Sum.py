@@ -85,7 +85,7 @@ class Solution:
         for r in range(len(nums)):
             Sum += nums[r]
             # while Sum >= s and l <= r: 可
-            while Sum >= s:
+            while Sum >= s and l <= r:
                 res = min(res, (r - l + 1))
                 Sum -= nums[l]  # 关键点
                 l += 1  # l一定是在范围内，不必再加l的边界条件
