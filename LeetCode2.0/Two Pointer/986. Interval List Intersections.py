@@ -33,7 +33,7 @@ class Solution:
                 res.append([max(a1, b1), min(a2, b2)])
             
             # move pointer
-            if b2 < a2:
+            if b2 < a2:  # A[i]与B[j]的头比完，接下来还有B[j]的尾巴还没有比，所以以B[j]尾巴为基准
                 j += 1
             else:
                 i += 1

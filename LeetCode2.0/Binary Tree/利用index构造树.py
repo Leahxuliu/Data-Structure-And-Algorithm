@@ -10,7 +10,6 @@ left child: 2n + 1
 right chile: 2n + 2
 '''
 
-from collections import deque
 
 # define TreeNode
 class TreeNode:
@@ -19,7 +18,10 @@ class TreeNode:
         self.left = None
         self.right = None
 
+
+# BFS
 # construct the Binary Tree
+from collections import deque
 class BinaryTree:
     def constructBT(self, nodeList):
         if nodeList == None:
@@ -44,3 +46,26 @@ class BinaryTree:
 
 X = BinaryTree()
 print(X.constructBT([1,2,3,4,5]))
+
+
+# DFS
+class Tree:
+    def buildTree(self, nodeList):
+        if nodeList == []:
+            return 
+
+        def helper(root, index):
+            if index >= len(nodeList):
+                return 
+            
+            root = TreeNode(nodeList[index])
+            root.left = helper(root.left, 2 * index + 1)
+            root.right = helper(root.right, 2 * index + 2)
+            return root
+        
+        root = None
+        root = helper(root, 0)
+        return root
+
+y = Tree()
+print(y.buildTree([1,2,3,4,5]))

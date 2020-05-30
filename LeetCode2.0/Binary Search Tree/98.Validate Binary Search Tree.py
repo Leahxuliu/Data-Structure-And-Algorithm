@@ -15,7 +15,9 @@ Time complexity: O(N)
 Space: O(logN)
 
 
-B. 
+B. 中序遍历BFS
+
+C. 普通的BFS
 '''
 
 # Definition for a binary tree node.
@@ -44,8 +46,7 @@ class Solution:
         return helper(root, max_val, min_val)
 
 
-# BFS
-
+# BFS 中序遍历
 class Solution:
     def isValidBST(self, root: TreeNode) -> bool:
         if root == None:
@@ -69,4 +70,28 @@ class Solution:
             if curr.right != None:
                 node = curr.right
             
+        return True
+
+
+# BFS 普通
+from collections import deque
+class Solution:
+    def isValidBST(self, root: TreeNode) -> bool:
+        if root == None:
+            return True
+
+        queue = deque()
+        queue.append([root, float('inf'), float('-inf')])
+
+        while queue:
+            node, max_val, min_val = queue.popleft()
+
+            if node.val >= max_val or node.val <= min_val:
+                return False
+            
+            if node.left != None:
+                queue.append([node.left, node.val, min_val])
+            if node.right != None:
+                queue.append([node.right, max_val, node.val])
+
         return True
