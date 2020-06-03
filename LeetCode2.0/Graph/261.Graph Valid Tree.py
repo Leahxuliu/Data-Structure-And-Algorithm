@@ -32,7 +32,7 @@ II. Method
 
 '''
 
-'''# BFS
+# BFS
 from collections import deque
 class Solution:
     def validTree(self, n, edges):
@@ -65,7 +65,7 @@ class Solution:
                         else:
                             if out != parent:
                                 return False
-        return True'''
+        return True
 
 # DFS
 class Solution2:
@@ -107,7 +107,7 @@ class Solution2:
 X = Solution2()
 print(X.validTree2(5, [[0,1], [1,2], [2,3], [1,3], [1,4]]))
 
-'''# Union find
+# Union find
 class Solution:
     def validTree(self, n, edges):
         if n == 0:
@@ -131,4 +131,4 @@ class Solution:
                 return False
             else:
                 groupTag[root2] = root1
-        return True'''
+        return True
