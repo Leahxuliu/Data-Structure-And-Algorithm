@@ -101,3 +101,49 @@ res不要是list，set
 set的时间复杂度是O(1)!!!!
 小丁的方法过于繁琐
 '''
+
+'''
+method - two pointer
+1. sort the nums
+2. traverse the num from first one to the last one (nums[i])
+3. set two pointers, l:i + 1, r: len(nums) - 1
+4. to find nums[i] + nums[l] + nums[r] == 0  (temp)
+    if temp > 0, r -= 1
+    if temp < 0, l += 1
+    until l = r
+
+time: O(n^2)
+space: O(1)
+'''
+
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        if nums == []:
+            return []
+        
+        nums.sort()
+        n = len(nums)
+        res = set()
+        for i in range(n - 2):
+            if nums[i] > 0:
+                break
+            if i >= 1 and nums[i] == nums[i - 1]:
+                continue
+                
+            l = i + 1
+            r = n - 1
+            
+            while l < r:
+                temp = nums[i] + nums[l] + nums[r]
+                if temp == 0:
+                    res.add((nums[i], nums[l], nums[r]))
+                    l += 1
+                    r -= 1
+                
+                elif temp > 0:
+                    r -= 1
+                elif temp < 0:
+                    l += 1
+        return list(res)
+                
+            

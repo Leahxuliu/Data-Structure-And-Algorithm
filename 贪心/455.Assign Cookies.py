@@ -22,6 +22,7 @@ corner case:
 
 '''
 
+# 像贪心的写法
 class Solution:
     def findContentChildren(self, g: List[int], s: List[int]) -> int:
         if g == None or s == None:
@@ -41,4 +42,25 @@ class Solution:
                 j += 1
             else:
                 j += 1
+        return res
+
+
+# 像greedy模版的写法
+class Solution:
+    def findContentChildren(self, g: List[int], s: List[int]) -> int:
+        if s == [] or g == []:
+            return 0
+        
+        g.sort()
+        s.sort()
+        res = 0
+        j = 0
+        for i in g:
+            while j < len(s):
+                if i <= s[j]:
+                    res += 1
+                    j += 1
+                    break
+                j += 1
+                
         return res

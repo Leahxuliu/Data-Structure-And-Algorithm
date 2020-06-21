@@ -3,7 +3,7 @@
 # @Time    : 2020/05/25
 
 '''
-Method
+Method - greedy
 Steps:
     1. sort intervals based on interval[0]
     2. append intervals[0] into res
