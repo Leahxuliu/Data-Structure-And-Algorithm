@@ -92,7 +92,7 @@ class Solution:
         while root:
             if root.val == key:
                 if root.left == None and root.right == None:
-                    root = None  # 错误，res里面，这个node没有变成None
+                    root = None  # 错误 curr不会变成none，想要改变这里必须是上一个node.left = None 或node.right = None
                     return res
                 
                 elif root.left == None:

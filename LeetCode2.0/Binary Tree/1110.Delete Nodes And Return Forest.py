@@ -67,6 +67,17 @@ class Solution:
 
 '''
 正确
+
+1. 找到新的root， 放入res里面（随着后面的修改，已经放入res里面的root也会随之被修改  从上往下的过程中实现
+2. 判断这个node是不是要被删除的node，如果是，则返回none，如果不是则返回root       从下往上的过程中实习
+
+通过建立两个flag来实现
+1. 判断是不是新root的flag，is_root  也就是这个节点的上一个节点是不是被删除点，如果是is_root == True
+2. 判断该节点是不是被删除点
+'''
+
+'''
+首先把to_delete变成set
 '''
 class Solution:
     def delNodes(self, root: TreeNode, to_delete: List[int]) -> List[TreeNode]:
@@ -81,10 +92,16 @@ class Solution:
             if is_root == True and flag == False:
                 res.append(root)
             
-            root.left = helper(root.left, flag)
+            root.left = helper(root.left, flag)  # 易错 放入res里面（随着后面的修改，已经放入res里面的root也会随之被修改 
             root.right = helper(root.right, flag)
             
-            if flag == True:
+            '''
+            也可以写在这，但是这样的话，是从下往上记录的root，与题目要求顺序相反，最后要[::-1]一下
+            if is_root == True and flag == False:
+                res.append(root)
+            '''
+
+            if flag == True:  # 为什么 先遍历？ 因为从下而上
                 return None
             else:
                 return root

@@ -36,6 +36,22 @@ C. recursion + inorder
 #         self.right = right
 
 
+'''
+  2
+ / \
+4   1
+   /
+  3
+  
+  
+  3
+ / \
+1   4
+   /
+  2
+  
+'''
+
 # 迭代 中序遍历
 class Solution:
     def recoverTree(self, root: TreeNode) -> None:
@@ -67,4 +83,30 @@ class Solution:
             if curr.right:
                 p_node = curr.right
         
-        f.val, s.val = s.val, f.val
+        f.val, s.val = s.val, f.val  # change the value
+
+
+# recursion
+class Solution:
+    def recoverTree(self, root: TreeNode) -> None:
+        """
+        Do not return anything, modify root in-place instead.
+        """
+        if root == None:
+            return 
+        
+        def helper(root):
+            if root == None:
+                return 
+            
+            helper(root.left)
+            if root.val < self.pre.val:
+                node.append(self.pre)
+                node.append(root)
+            self.pre = root
+            helper(root.right)
+        
+        self.pre = TreeNode(float('-inf'))
+        node = []
+        helper(root)
+        node[0].val, node[-1].val = node[-1].val, node[0].val

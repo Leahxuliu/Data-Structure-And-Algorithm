@@ -10,7 +10,7 @@ II. Method
     A. DFS - [-1, 0, 1]
         1. build visited and graph
         2. scan by DFS
-        3. if the node's neighbor vertex is visiting(1) --> have circle --> False
+        3. if the node's neighbor vertex is visiting(0) --> have circle --> False
     
     B. Topo Sort
         1. build indegree and outdegree

@@ -5,8 +5,10 @@
 '''
 Method - binary search
 1. set l, r start at 0, the number of nums - 1, l <= r
-2. calculate mid = (l + r) // 2
-3. compare nums[mid] and nums[l] and target and nums[r]
+2. do while loop
+    1. calculate mid = (l + r) // 2
+    2. compare nums[mid] and nums[l] and target and nums[r]
+
 4. if can not find nums[mid] == target, return -1
 '''
 
