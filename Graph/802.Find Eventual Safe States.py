@@ -144,6 +144,39 @@ class Solution:
                 safe_nodes.append(i)
         
         return sorted(safe_nodes)
+
+
+# 写法2
+class Solution:
+    def eventualSafeNodes(self, graph: List[List[int]]) -> List[int]:
+        if graph == [[]] or graph == []:
+            return [x for x in range(len(graph))]
+        
+        n = len(graph)
+        visited = [-1] * n
+        res = []
+        
+        def dfs(i):
+            if visited[i] == 0:
+                return False
+            if visited[i] == 1:
+                return True
+            
+            visited[i] = 0
+            for out in graph[i]:
+                if visited[out] == 0:
+                    return False
+                if visited[out] == -1:
+                    if dfs(out)== False:
+                        return False
+            visited[i] = 1
+            return True
+                    
+        
+        for i in range(n):
+            if dfs(i) == True:
+                res.append(i)
+        return res
                 
 x = Solution()
 print(x.eventualSafeNodes([[1,2],[2,3],[5],[0],[5],[],[]]))

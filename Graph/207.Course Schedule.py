@@ -91,3 +91,16 @@ class Solution:
                 return False
         visited[i] = 1
         return True
+
+    # ok
+    def dfs(i):
+            visited[i] = 0
+            for out in graph[i]:
+                if visited[out] == 0:
+                    return False
+                elif visited[out] == -1:
+                    if dfs(out) == False:
+                        return False
+                    
+            visited[i] = 1
+            return True

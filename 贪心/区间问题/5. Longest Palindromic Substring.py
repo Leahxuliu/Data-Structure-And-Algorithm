@@ -36,7 +36,3 @@ class Solution:
                             max_len = temp
 
         return s[start: start + max_len]
-
-                            
-                            
-                

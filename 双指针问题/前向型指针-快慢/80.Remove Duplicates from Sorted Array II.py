@@ -53,7 +53,7 @@ class Solution:
                 count += 1
                 if count == 2:
                     i += 1
-                    nums[i] = nums[j]
+                    nums[i] = nums[j]  # key
                     j += 1
                 else:
                     j += 1

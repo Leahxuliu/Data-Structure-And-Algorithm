@@ -207,3 +207,57 @@ class Solution:
             else:
                 i -= 1
         return False
+
+
+
+class Solution:
+    def searchMatrix(self, matrix, target):
+        """
+        :type matrix: List[List[int]]
+        :type target: int
+        :rtype: bool
+        """
+        if matrix == [] or matrix == [[]]:
+            return False
+        
+        m = len(matrix)
+        n = len(matrix[0])
+        
+        def level(i,j):
+            l = j
+            r = len(matrix[0]) - 1
+            while l <= r:
+                mid = l + (r - l) // 2
+                Val = matrix[i][mid]
+                if Val == target:
+                    return True
+                elif Val > target:
+                    r = mid - 1
+                else:
+                    l = mid + 1
+            return False
+        
+        def vertial(i,j):
+            l = 0
+            r = i
+            while l <= r:
+                mid = l + (r - l) // 2
+                Val = matrix[mid][j]
+                if Val == target:
+                    return True
+                elif Val > target:
+                    r = mid - 1
+                else:
+                    l = mid + 1
+            return False
+                    
+        for i in range(min(m, n)):
+            if matrix[m-i-1][i] == target:
+                return True
+            elif matrix[m-i-1][i] > target:
+                if vertial(m-i-1, i) == True:
+                    return True
+            elif matrix[m-i-1][i] < target:
+                if level(m-i-1,i) == True:
+                    return True
+        return False

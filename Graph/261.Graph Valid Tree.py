@@ -35,6 +35,17 @@ corner case:
 time O(N) space O(N)
 '''
 
+'''
+Union find by rank and path compression
+
+1. create a groupTag by using the index as tag
+2. use a rank list to represent the graph level which i is root
+3. traversal the edges(i,j)
+    use dfs to find the i's root and j's root
+    if they are the same root, there are a circle
+    return False
+'''
+
 class Solution:
     def validTree(self, n: int, edges: List[List[int]]) -> bool:
         if not n:
@@ -68,6 +79,13 @@ class Solution:
 DFS
 visited [0,1] parent_index
 无环：其访问过的节点有且只有一个，并且是其节点的上一个节点（parent_index)
+
+Method - dfs
+1. use adjancent list to represent the graph
+2. use visited list to memo the cell is visited or not
+3. use a for loop to scan the cells which has not been visited
+    a. use dfs to scan the neighbor cells
+4. if the neighbor cell has visited and this neighbor cell is not last visited cell --> have a circle --> not a valid tree
 
 时间复杂度：
 vetex: 角

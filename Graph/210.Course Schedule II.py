@@ -54,7 +54,7 @@ class Solution:
         
         path = []
         for i in range(numCourses):
-            if self.pathDFS(graph, visited, i, path) == True:  # 易错点：path是一个参数
+            if self.pathDFS(graph, visited, i, path) == True:  # 易错点 [[0,2],[1,2],[2,0]] 只要有环，所有结果都是空
                 return []        
         return path[::-1]  # 因为dfs是先到根部，再往回走，所以要倒一下
             
@@ -71,7 +71,7 @@ class Solution:
             if self.pathDFS(graph, visited, elem, path) == True:
                 return True
         visited[index] = 1
-        path.append(index)
+        path.append(index)  # 只有没有环的cell才会变成1
         return False
 
 

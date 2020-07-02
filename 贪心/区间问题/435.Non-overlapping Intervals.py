@@ -62,3 +62,20 @@ class Solution:
                 count += 1
                 pre_ending = end
         return n - count
+
+# 类似merge的写法
+class Solution:
+    def eraseOverlapIntervals(self, intervals: List[List[int]]) -> int:
+        if intervals == [[]] or intervals == []:
+            return 0
+        
+        intervals.sort(key = lambda x:x[1])
+        res = [intervals[0]]
+        
+        for start, end in intervals[1:]:
+            pre_end = res[-1][1]
+            if start < pre_end:
+                pass
+            else:
+                res.append([start, end])
+        return len(intervals) - len(res)

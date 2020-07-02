@@ -21,7 +21,7 @@ class Solution:
 
 '''
 方法2 2分搜索
-时间复杂度 O(logN)
+时间复杂度 O(nlogN)
 '''
 class Solution:
     def twoSum(self, numbers: List[int], target: int) -> List[int]:

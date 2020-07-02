@@ -50,7 +50,7 @@ class Solution:
                 else:  # T在右边的unsorted内
                     l = mid + 1
             elif nums[l] == nums[mid]:  # 只有两个数字的时候，下一轮就return -1
-                l = mid + 1
+                l = mid + 1  # 或者l += 1
             elif nums[l] > nums[mid]:  # 左边是unsorted,右边是sorted
                 if nums[mid] < target <= nums[r]:  # T在右边sortedd内
                     l = mid + 1
