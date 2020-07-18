@@ -27,3 +27,35 @@ class Solution:
                     dp[i] = False
         return dp[n]
         
+'''
+dp[i]
+
+initial value: False
+dp[i] = dp[i - len(w)],  s[i-len(w):i] == w
+
+0 1 2 3 4 5 6 7 8
+- l e e t c o d e
+T F F F T F F F T
+
+'''
+
+
+class Solution:
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+        if s == '':
+            return False
+        
+        n = len(s)
+        dp = [False] * (n + 1)
+        
+        for i in range(n + 1):
+            if i == 0:
+                dp[i] = True
+            
+            else:
+                for w in wordDict:
+                    if s[i - len(w):i] == w:
+                        dp[i] = dp[i - len(w)]
+                        if dp[i] == True:
+                            break
+        return dp[n]

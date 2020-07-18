@@ -23,7 +23,7 @@ class Solution:
         if n == 0:  # corner case
             return 0
         
-        dp = [[-float(inf)] * 2 for _ in range(n + 1)]
+        dp = [[-float('inf')] * 2 for _ in range(n + 1)]
         
         dp[0][0] = 0
         

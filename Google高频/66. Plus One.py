@@ -19,3 +19,19 @@ class Solution:
         if pre == 1:  # 易错
             new_digit.insert(0, pre)
         return new_digit
+
+
+
+class Solution:
+    def plusOne(self, digits: List[int]) -> List[int]:
+        if digits == []:
+            return [1]
+        
+        d = 0
+        n = 0
+        for i in range(len(digits) - 1, -1, -1):
+            d += digits[i] * (10 ** n)
+            n += 1
+        
+        d_str = str(d+1)
+        return [int(x) for x in d_str]

@@ -76,7 +76,7 @@ class Solution:
             return res
 
 '''
-思路二
+sliding window
 '''
 class Solution:
     def minSubArrayLen(self, s: int, nums: List[int]) -> int:
@@ -93,3 +93,10 @@ class Solution:
             return 0
         else:
             return res
+
+
+'''
+前缀和 + binary search
+
+'''
+
