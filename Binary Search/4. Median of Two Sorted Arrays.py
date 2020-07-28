@@ -91,33 +91,38 @@ class Solution:
 """
 class Solution:
     def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
-        
-        def getKthElement(k):    
-            index1, index2 = 0, 0
+        def find(k):
+            i = 0
+            j = 0
+            
             while True:
-                # 特殊情况
-                if index1 == m:
-                    return nums2[index2 + k - 1]
-                if index2 == n:
-                    return nums1[index1 + k - 1]
+                # corner case
+                if i == n:  # i超出边界或者nums1是空
+                    return nums2[j + k - 1]
+                if j == m:
+                    return nums1[i + k - 1]
                 if k == 1:
-                    return min(nums1[index1], nums2[index2])
-
-                # 正常情况
-                newIndex1 = min(index1 + k // 2 - 1, m - 1)
-                newIndex2 = min(index2 + k // 2 - 1, n - 1)
-                pivot1, pivot2 = nums1[newIndex1], nums2[newIndex2]
+                    return min(nums1[i], nums2[j])
+                
+                i_temp = min(i + k // 2 - 1, n - 1)  # 判断取k/2个数的时候，是否超过边界
+                j_temp = min(j + k // 2 - 1, m - 1)
+                pivot1 = nums1[i_temp]
+                pivot2 = nums2[j_temp]
                 if pivot1 <= pivot2:
-                    k -= newIndex1 - index1 + 1
-                    index1 = newIndex1 + 1
+                    k -= i_temp - i + 1
+                    i = 1 + i_temp
                 else:
-                    k -= newIndex2 - index2 + 1
-                    index2 = newIndex2 + 1
-        
-        m, n = len(nums1), len(nums2)
-        totalLength = m + n
-        if totalLength % 2 == 1:
-            return getKthElement((totalLength + 1) // 2)
+                    k -= j_temp - j + 1
+                    j = 1 + j_temp
+                
+        n = len(nums1)
+        m = len(nums2)
+        med = 0
+        if (n + m) % 2 == 1:
+            k = (n + m) // 2 + 1
+            med = find(k)
         else:
-            return (getKthElement(totalLength // 2) + getKthElement(totalLength // 2 + 1)) / 2
-
+            k = (n + m) // 2
+            med = (find(k) + find(k + 1)) / 2
+        
+        return med
