@@ -15,7 +15,8 @@ key: using sliding window to clarify the range and using dictionary to store the
     store the length when the count is 2 (each time stor the longest)
 4. repeat step2 and step3 until r has been moved to end of s
 
-
+衍生题
+340  992
 '''
 from collections import defaultdict
 class Solution:
