@@ -107,4 +107,45 @@ class Solution:
                 
         backtrack(0, [])
         return all_res
+
+
+# 类似dp
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        dp = [[] for _ in range(len(nums) + 1)]
+
+        for i in range(len(nums) + 1):
+            if i == 0:
+                dp[i] = [[]]
+            else:
+                dp[i] = dp[i - 1] + [elem + [nums[i - 1]] for elem in dp[i - 1]]
         
+        return dp[i]
+        
+# 优化
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        pre = [[]]
+
+        for i in range(1, len(nums) + 1):
+            pre += [elem + [nums[i - 1]] for elem in pre]
+        
+        return pre
+
+
+# dfs + memo
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        def dfs(i):
+            if i in memo:
+                return memo[i]
+            if i == 0:
+                memo[i] = [[], [nums[i]]]
+                return memo[i] 
+
+            memo[i] = dfs(i - 1) + [elem + [nums[i]] for elem in dfs(i - 1)]
+            return memo[i]
+        
+        memo = {}
+        dfs(len(nums) - 1)
+        return memo[len(nums) - 1]

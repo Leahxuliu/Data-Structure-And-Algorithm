@@ -30,4 +30,44 @@ class Solution {
     }
 }
 
-/** reverseByIteration */
+/**
+ * 注意 明确函数return的是reversed之后的head
+ * 当作黑匣子处理
+ */
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        if (head == null || head.next == null) return head;
+
+        ListNode curr = head.next;
+        ListNode end = head.next;
+        head.next = null;
+        ListNode reverse = reverseList(curr);
+        end.next = head;
+        return reverse;
+    }
+}
+
+
+/** Iteration
+* 1. 保留从第二个节点开始的linked list（curr）
+* 2. 断开第一个节点，第一个节点是新linked list的起点
+* 3. 每次保留curr第二个以后的Linked list，断开curr的第一个节点
+* 4. 断开的节点与new head相连，再把new head移到最头部的节点
+*/
+
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        if (head == null || head.next == null) return head;
+
+        ListNode curr = head.next;
+        head.next = null;
+
+        while (curr != null) {
+            ListNode next_curr = curr.next;
+            curr.next = head;
+            head = curr;
+            curr = next_curr;
+        }
+        return head;
+    }
+}
