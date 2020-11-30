@@ -91,3 +91,47 @@ class Solution:
             dist.pop(point)
             maked.append(point)
         return count
+
+
+# Kruskal
+from heapq import *
+
+class Solution:
+    def minCostConnectPoints(self, points: List[List[int]]) -> int:
+        def find(v):
+            while groupTag[v] != v:
+                groupTag[v] = groupTag[groupTag[v]]
+                v = groupTag[v]
+            return v
+        
+        def union(root1, root2):
+            if rank[root1] < rank[root2]:
+                groupTag[root1] = root2
+                rank[root2] += rank[root1]
+            else:
+                groupTag[root2] = root1
+                rank[root1] += rank[root2]
+        
+        n = len(points)
+        # make pairs
+        heap = []
+        for i in range(n - 1):
+            for j in range(i + 1, n):
+                temp = abs(points[i][0] - points[j][0]) + abs(points[i][1] - points[j][1])
+                heap.append((temp, i, j))
+        
+        groupTag = {i:i for i in range(n)}
+        rank = {i:1 for i in range(n)}
+        count = 0
+        times = 0
+
+        heapify(heap)
+        while times != n - 1:
+            w, i, j = heappop(heap)
+            root1 = find(i)
+            root2 = find(j)
+            if root1 != root2:
+                union(root1, root2)
+                count += w
+                times += 1
+        return count
