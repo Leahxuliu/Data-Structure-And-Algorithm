@@ -724,7 +724,7 @@ class Solution {
 
 #### 3.1.4.2 最短路径
 
-？
+`Dijkstra` 算法 ？
 
 
 
@@ -896,21 +896,111 @@ def kruskal(pair, n):
 
 ![截屏2020-12-05 下午4.38.41](/Users/leah/Dropbox/Leetcode/CS61B/CS61B_Xu/notebook/graph/截屏2020-12-05 下午4.38.41.png)
 
+```python
+# 本质就是DFS [-1,0,1]的后序遍历，然后后序遍历的结果倒置就是topo sort
+# 210
+
+'''
+b --> a
+'''
+
+class Solution:
+    def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+        def DFS(i):
+            '''
+            True: no circle
+            False: have circle
+            '''
+            if visited[i] == 1:
+                return True
+            if visited[i] == 0:
+                return False
+            
+            visited[i] = 0
+            for out in adj[i]:
+                if DFS(out) == False:
+                    return False
+            visited[i] = 1
+            self.res.append(i)
+            return True
+        
+        p = prerequisites
+        if p == [] or p == [[]]:
+            return [x for x in range(numCourses)]
+        
+        visited = [-1] * numCourses
+        adj = [[] for _ in range(numCourses)]
+
+        for i, j in p:
+            adj[j].append(i)
+        
+        self.res = []
+        for i in range(numCourses):
+            if visited[i] == -1:
+                if DFS(i) == False:
+                    return []
+        return self.res[::-1]
+
+```
+
+
+
 ##### 宽度优先
 
+**Solution**
 
+1. Calculate in-degree of all vertices.
+2. Pick any vertex v which has in-degree of 0.
+3. Add v to our topological sort list. Remove the vertex v and all edges coming out of it. Decrement in-degrees of all neighbors of vertex v by 1.
+4. Repeat steps 2 and 3 until all vertices are removed.
 
+```python
+from collections import deque
+class Solution:
+    def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+        p = prerequisites
+        if p == [] or p == [[]]:
+            return [x for x in range(numCourses)]
+        
+        indegree = [0] * numCourses
+        adj = [[] for _ in range(numCourses)]
 
+        for i, j in p:
+            # j --> i
+            adj[j].append(i)
+            indegree[i] += 1
+        
+        queue = deque()
+        res = []
+        for i in range(numCourses):
+            if indegree[i] == 0:
+                queue.append(i)
+            
+        while queue:
+            node = queue.popleft()
+            res.append(node)
+
+            for out in adj[node]:
+                indegree[out] -= 1
+                if indegree[out] == 0:
+                    queue.append(out)
+            
+        return res if sum(indegree) == 0 else []
+```
+
+![截屏2020-12-14 下午9.30.10](/Users/leah/Dropbox/Leetcode/CS61B/CS61B_Xu/notebook/graph/截屏2020-12-14 下午9.30.10.png)
 
 ### 3.2.2 判断环
 
 #### 3.2.2.1 DFS [-1,0,1]法则
 
 * 遇到正在被访问的点，则说明有环
-
-
+* 参考遍历里的DFS
 
 #### 3.2.2.2 拓扑
+
+* 最后indgree里面还有不是0的节点，则有环
+* 参考遍历里的topo 广度优先
 
 
 
@@ -924,20 +1014,363 @@ def kruskal(pair, n):
 
 ### 3.2.4 路径类
 
-#### 3.1.4.1 所有路径
+- 210.Course Schedule II  
+- 399.Evaluate Division
+- 444.Sequence Reconstruction
+- 1376.Time Needed to Inform All Employees
+- 程序的依赖关系.py
+
+#### 3.2.4.1 路径和/层数
+
+* 依赖关系
+* 课程表
+  * 拓扑排序
+
+#### 3.2.4.2 单点最短路径
+
+`Dijkstra` 算法
+
+- 特点：支持环，仅能处理权重**全为正**的有向图 （无向图是否可以使用？？？）
+- 时间复杂度为 `O(ElogV)`
+- 边的放松顺序
+  小根堆取出距离起点距离最近的顶点，依次放松该顶点指向邻接点的边；且每条边只会被放松一次。
 
 
 
-#### 3.1.4.2 最短路径
+`DAG` 有向无环图算法
+
+* DAG SPT Algorithm
+  * Directed Acyclic Graphs Shortest Path
+
+- 特点：不支持环，权重**正或负**都能处理
+- 时间复杂度为 `O(E+V)`
+- 边的放松顺序
+  按照顶点的拓扑顺序，放松所有的边；且所有的边只会被放松一次。
+
+
+
+##### Dijkstra
+
+- 迪杰斯特拉算法
+- source点到各个node的最短
+- 不是综合最短！！！
+- 743题(带环)
+
+**思路1 主要记这个**
+
+1. 把所有点以inf的起始放入
+2. source点是0
+3. 每一次pop最短的那个点
+4. 遍历其相邻点，改变path
+   - 注意这里的path指的是source点到该点之间的最短权重
+   - 优化版的Prim里的path指的是两点之间的最短权重
+5. 时间复杂度： O(V*VlogV) 空间复杂度: O(V)
+
+```python
+# 基本模型
+# 先把所有点都加入到dict里
+# 每次pop最近的一个点
+# 以点为基准
+# from CS61B
+
+from collections import defaultdict
+
+class Solution:
+    def networkDelayTime(self, times: List[List[int]], N: int, K: int) -> int:
+        # adjancent list
+        adj = defaultdict(dict)
+        for i, j, w in times:
+            adj[i][j] = w
+        
+        # init a dist
+        dist = {node: float('inf') for node in range(1, N + 1)}
+        dist[K] = 0
+
+        # find the shortest paths 
+        res = {}
+        while dist:
+            i, w = sorted(dist.items(), key = lambda x:x[1])[0]
+            res[i] = w
+            dist.pop(i)
+
+            for j in adj[i]:
+                if j not in res:
+                    dist[j] = min(dist[j], w + adj[i][j])
+        res = sorted(res.values(), key = lambda x:x)[-1]
+        return res if res != float('inf') else -1
+```
+
+
+
+**思路2**
+
+- 从起点开始，把相邻边以及对应点加入heap
+- pop最短的边，作为该点的最短路径加入到res中，然后加入该边对应的点的相邻边的积累和以及对应的点
+- 直到所有点都被加入到res里
+- 类似BFS
+- 区别在于：
+  - 某点可以多次进入heap，选取最小的pop，pop出来以后，放入res，也就是代表该点已经找到最短路径，不需要再往heap里面加了
+  - a点在heap里面可以是不止一次的出现，pop出来的是最短路径
+  - 如果res的长度等于N，则全部node的最短路径都已经找到，返回res
+- 时间复杂度：
+  - O(ElogE), e is length of edges
+- 空间复杂度:
+  - O(E + N), E is the graph space(领接表) + N is ,ax space used in heap
+
+```python
+# heap 优化版模型
+# 以边为基准
+# from lichief
+
+from collections import defaultdict
+from heapq import *
+
+# pairs(i, j, weight)   the number of nodes     the start point
+def shortestPath(pairs, N, K):
+    # transfer pairs into graph [i:{j:w}]
+    graph = defaultdict(dict)
+    for i, j, w in pairs:
+        graph[i][j] = w
+    
+    # use the heap to find the shortest path
+    # 切记 一定是path在前，因为要以path来排序
+    heap = [(0, K)]
+    res = {}
+    
+    while heap:
+        w, i = heappop(heap)
+        
+        if i in res:
+            continue
+        else:
+            res[i] = w
+        
+        if len(res) == N:
+            return res
+        
+        for j in graph[i]:
+            if j not in res:
+                heappush(heap, (w + graph[i][j], j))
+                
+pairs = [[2, 1, 1], [2, 3, 1], [3, 4, 1]]
+N = 4
+K = 2
+
+shortestPath(pairs, N, K)
+```
+
+
+
+##### DAG
+
+![截屏2020-12-05 下午7.37.09](/Users/leah/Dropbox/Leetcode/CS61B/CS61B_Xu/notebook/graph/截屏2020-12-05 下午7.37.09.png)
+
+**Steps**
+
+1. First: We have to find a topological order,  Runtime is O(V + E).
+2. We have to visit all the vertices in topological order, relaxing all edges as we go. （like Dijkstra）Runtime for step 2 is also O(V + E).
+
+
+
+```python
+# 有待检验
+from collections import defaultdict
+class Solution:
+    def networkDelayTime(self, times: List[List[int]], N: int, K: int) -> int:
+        def DFS(i):
+            '''
+            find the toposort and determine whether there is a circle
+            True: no circle
+            False: have circle
+            '''
+            if visited[i] == 1:
+                return True
+            if visited[i] == 0:
+                return False
+            
+            visited[i] = 0
+            for out in adj[i].keys():
+                if DFS(out) == False:
+                    return False
+                
+            visited[i] = 1
+            topo_sort.append(i)
+            return True
+        
+        # make adjacent list
+        adj = defaultdict(dict)
+        for i, j, w in times:
+            adj[i][j] = w
+
+        visited = {N:-1 for N in range(1, N + 1)}
+        topo_sort = []
+        # find the toposort and determine whether there is a circle
+        if DFS(K) == False:
+            return -1
+        if len(topo_sort) != N:
+            return -1
+        
+        # find the min distance
+        topo_sort = topo_sort[::-1]
+        dist = {node:float('inf') for node in topo_sort}
+        dist[K] = 0
+
+        res = {}
+        for i, w in dist.items():
+            res[i] = w
+            for out in adj[i]:
+                dist[out] = min(dist[out], w + adj[i][out])
+        return max(res.values())
+
+```
 
 
 
 
 
-#### 3.1.4.3 最小生成树
+```java
+public class AcyclicSP {
+    private double[] distTo;
+    private DirectedEdge[] edgeTo;
+
+    public AcyclicSP(EdgeWeightedDigraph G, int s) {
+        distTo = new double[G.V()];
+        edgeTo = new DirectedEdge[G.V()];
+
+        //validateVertex(s);
+
+        // 初始化
+        for (int v = 0; v < G.V(); v++)
+            distTo[v] = Double.POSITIVE_INFINITY;
+        distTo[s] = 0.0;
+
+        // visit vertices in topological order
+        // 拓扑排序顶点，并判断是否有环
+        Topological topological = new Topological(G);
+        if (!topological.hasOrder())
+            throw new IllegalArgumentException("Digraph is not acyclic.");
+        
+        // 按照拓扑顺序取出顶点
+        for (int v : topological.order()) {
+            for (DirectedEdge e : G.adj(v))
+                relax(e);
+        }
+    }
+
+    // relax edge e
+    private void relax(DirectedEdge e) {
+        int v = e.from(), w = e.to();
+        if (distTo[w] > distTo[v] + e.weight()) {
+            distTo[w] = distTo[v] + e.weight();
+            edgeTo[w] = e;
+        }
+    }
+}
+```
+
+
+
+#### 3.2.4.3 最长路径
+
+一定要是无环的，因为有环的话，会陷入到无限循环当中
+
+把权重取负数，用最短路径来做
+
+#### 3.2.4.4 最小生成树
 
 不能用Prim‘s Algorithm和Kruskal's Algorithm的原因：
 
 1->2 8, 1->3 8, 2->3 4, 3->2 3   
 有平行边的时候，且其它边都是相等的距离，那么不一定能得到最小生成树
+
+
+
+
+
+## 3.3 网格搜索
+
+- 易错点：注意grid里面是int还是str
+- コツ：
+  - 边界条件，可行的条件，i >= 0, i <= len(n) - 1, visited[i] == 0, grid[i] == 1/'1'
+  - append之后马上visited[i] = 1，这样不容易错
+
+- 200.Number of Islands
+- 733
+- 狗家OA，相同岛屿，迷宫死路个数
+
+
+
+### 3.3.1 DFS
+
+```python
+# 待优化
+class MySolution:
+    def main(self, grid):
+        if not grid:  # corner case
+            return None
+        if len(grid) == 1:
+            return
+        
+        # build empty visited with the same size as grid
+        visited = [[0 for _ in range(len(grid[0]))] for _ in range(len(grid))]
+        # visited =[[0] * len(grid[0]) for _ in range(len(grid))] --> [[0], [0], [0], [0]]
+        
+        # scan grid and dfs the island node
+        for i in range(len(grid)):  # len(grid) = 行数
+            for j in range(len(gird[i])):  # len(gird[i]) = 每行里面的个数
+                if grid[i][j] == 1 and visited[i][j] == 0:
+                    self.dfs(i, j, visited, grid)
+        return
+        
+    def dfs(self, i, j, visited, grid):  # i: 行; j: 列
+        if i < 0 or j <0 or i > len(grid) - 1 or j > len(grid[0]) - 1 or visited[i][j] == 1:  # 结束条件
+            return
+
+        # set visited
+        visited[i][j] = 1
+        self.dfs(i - 1, j, visited, grid)  # 上走一格
+        self.dfs(i + 1, j, visited, grid)  # 下走一格
+        self.dfs(i, j - 1, visited, grid)  # 左走一格
+        self.dfs(i, j + 1, visited, grid)  # 右走一格
+```
+
+
+
+### 3.3.2 BFS
+
+```python
+# 待优化
+class MySolution:
+    def main(self, grid):
+        if not grid:  # corner case
+            return None
+        if len(grid) == 1:
+            return
+        
+        # build empty visited with the same size as grid
+        visited = [[0 for _ in range(len(grid[0]))] for _ in range(len(grid))]
+        
+        from collections import deque
+        
+        for i in range(len(grid)):
+            for j in range(len(gird[i])):
+                if grid[i][j] == 1 and visited[i][j] == 0:
+                    queue.append([i, j])  # 0行0列
+                    visited[i][j] = 1
+                    while queue:
+                        r, c = queue.popleft()  # row 行, cloumn 列
+                        if r - 1 >= 0 and visited[r - 1][c] == 0:
+                            queue.append([r - 1, c])  # 向上走一格
+                            visited[r - 1][c] = 1
+                        if r + 1 <= len(grid) - 1 and visited[r + 1][c] == 0:
+                            queue.append([r + 1, c])  # 向下走一格
+                            visited[r + 1][c] = 1
+                        if c - 1 >= 0 and visited[r][c - 1] == 0:
+                            queue.append([r, c - 1])  # 向右走一格
+                            visited[r][c - 1] = 1
+                        if c + 1 <= len(grid[0]) - 1 and visited[r][c + 1] == 0:
+                            queue.append([r, c + 1])  # 向左走一格
+                            visited[r][c + 1] = 1
+        return
+```
 
