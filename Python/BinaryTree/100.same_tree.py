@@ -1,8 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# @Time    : 2/27/2020  
 # @Author  : XU Liu
-# @FileName: constructTree.py
 
 import constructTree
 from collections import deque
@@ -13,19 +11,18 @@ class TreeNode:
         self.left = None
         self.right = None
 
+'''
+题目理解：
+judge whether two binary tree are same
 
+思路：
+DFS
+using recursion to check the root, left-child and right-child
+
+time complexity: O(N) 
+space complexity: O(log(N)) average; O(N) worse
+'''
 class Solution:
-    '''
-    题目理解：
-    judge whether two binary tree are same
-
-    思路：
-    DFS
-    using recursion to check the root, left-child and right-child
-
-    time complexity order: O(N) 
-    space complexity order: O(log(N)) average; O(N) worse
-    '''
     def isSameTree(self, p, q):
         # p and q are both None
         if not p and not q:  
@@ -35,8 +32,7 @@ class Solution:
             return False
         if p.val != q.val:  
             return False
-        return self.isSameTree(p.left, q.left) and \
-               self.isSameTree(p.right, q.right)
+        return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
 
 
     '''
@@ -65,9 +61,9 @@ class Solution:
                 return False
             if p.val != q.val:
                 return False
-            else:
-                queue.append([p.left, q.left])
-                queue.append([p.right, q.right])
+
+            queue.append([p.left, q.left])
+            queue.append([p.right, q.right])
         return True
 
 

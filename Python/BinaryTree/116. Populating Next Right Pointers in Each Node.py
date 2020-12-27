@@ -20,36 +20,64 @@ input: node
 output: [1,#,2,3,#,4,5,6,7,#]
 corner case: root == None
 
-5. 解题思路
-    1. BFS遍历
-    2. 通过上一层给下一层加东西
+
+Method - BFS
+Steps:
+    1. use queue to store nodes of each level
+    2. make the node have next property
+    3. pop last level's nodes and append next level's nodes
+    
 
 '''
 
 from collections import deque
 class Solution:
     def connect(self, root: 'Node') -> 'Node':
-        res = root
-        
-        if root == None:
-            return  res
+        if not root:
+            return root
         
         queue = deque()
-        queue.append(root)
-        
+        curr = root
+        queue.append(curr)
+
         while queue:
-            q_len = len(queue)
-            for i in range(q_len - 1):
-                queue[i].next = queue[i + 1]
-            queue[q_len - 1].next = None
-            
-            for i in range(q_len):
-                node = queue.popleft()
-                if node.left != None:
-                    queue.append(node.left)
-                if node.right != None:
-                    queue.append(node.right)
+            n = len(queue)
+            for i in range(n):
+                curr = queue.popleft() 
+                if i == n - 1:
+                    curr.next = None
+                else:
+                    curr.next = queue[0]
                 
-        return res
+                if curr.left:
+                    queue.append(curr.left)
+                if curr.right:
+                    queue.append(curr.right)
+        return root
         
 
+'''
+DFS
+because this is a perfect binary tree, root.right.next = root.next.left
+自上而下
+'''
+
+class Solution:
+    def connect(self, root: 'Node') -> 'Node':
+        if not root:
+            return root
+        
+        if root.left:
+            root.left.next = root.right
+
+        if root.right:
+            if root.next:
+                root.right.next = root.next.left
+            # node 自带next，什么都不做时，node.next == None
+            # 所以下面可写可不写
+            #else:
+            #    root.right.next = None
+        
+        root.left = self.connect(root.left)
+        root.right = self.connect(root.right)
+        return root

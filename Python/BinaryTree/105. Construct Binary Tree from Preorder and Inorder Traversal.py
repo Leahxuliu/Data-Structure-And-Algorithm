@@ -25,14 +25,33 @@ corner case: len(list) == 0 --> None
                 root之后的是右边的
                 记录找到第一个与root相等的数所在位置,mid
     3. preorder[1:mid+1]是root的左边，并且该list里面的第一位数，是下一个root
-    4. root.left = left, root.righr = right,构成TreeNode
+    4. root.left = left, root.right = right,构成TreeNode
 
-'''
-
-'''
-DFS
-时间复杂度： O (N^2)，这里 N 是二叉树的结点个数，每调用一次递归方法创建一个结点，一共创建 N 个结点，在中序遍历中找到根结点在中序遍历中的位置，是与 N 相关的，这里不计算递归方法占用的时间。
-空间复杂度： O (1)
+II. Methods: 
+    A. DFS
+    Steps:
+        1. ending condition: preorder is [], return 
+        2. root is preorder[0]
+        3. find root in inorder (mid = inorder.index(preorder[0]))
+        4. root.left = dfs(left tree pre order, left tree right order)  # preorder[1:mid + 1]  inorder[:mid]
+           root.right = dfs(right tree pre order, left tree right order)  # preorder[mid + 1:]  inorder[mid + 1:]
+     
+    Complexity:
+        Time:  O(N**2)  index查找O(N), N*N
+        Space: O(N) since we store the entire tree
+    
+    
+    B. DFS + dict (optimization)
+    when we use index, the Time Complexity is O(n).
+    put inorder into dict to reduce time complexity
+    Steps:
+        1. put inorder into dict
+        2. same as methodI, except indext
+        
+    
+    Complexity:
+        Time: O(N)
+        Space:O(N) since we store the entire tree
 '''
 
 class Solution:
@@ -40,15 +59,10 @@ class Solution:
         if len(preorder) == 0:
             return None
         
-        '''
-        易错
-        root = preorder[0]
-        mid = inorder.index(root)
-        '''
         root = TreeNode(preorder[0])
         mid = inorder.index(preorder[0])
 
-        root.left = self.buildTree(preorder[1:mid+1], inorder[0:mid])
+        root.left = self.buildTree(preorder[1:mid+1], inorder[:mid])
         root.right = self.buildTree(preorder[mid+1:], inorder[mid+1:])
         return root
         

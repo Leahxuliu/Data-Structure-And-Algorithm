@@ -48,9 +48,3 @@ class Solution:
                 p_node = node.right
 
         return res
-
-
-# 用迭代写前序
-
-
-# 用迭代写后序

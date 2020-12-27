@@ -1,3 +1,5 @@
+
+
 # 1 知识点
 
 ## 1.1 基础知识
@@ -1098,6 +1100,45 @@ class Solution:
                     dist[j] = min(dist[j], w + adj[i][j])
         res = sorted(res.values(), key = lambda x:x)[-1]
         return res if res != float('inf') else -1
+```
+
+
+
+```java
+// i, w = sorted(dist.items(), key = lambda x:x[1])[0] 时间复杂度太高，用dict储存，heap来查找
+
+from collections import defaultdict
+from heapq import *
+
+class Solution:
+    def networkDelayTime(self, times: List[List[int]], N: int, K: int) -> int:
+        # adjancent list
+        adj = defaultdict(dict)
+        for i, j, w in times:
+            adj[i][j] = w
+        
+        # init a dist
+        dist = {node: float('inf') for node in range(1, N + 1)}
+        dist[K] = 0
+        heap = [(0, K)]
+        visited = set()
+
+        # relax edges
+        while heap:
+            w, curr = heappop(heap)
+            if curr in visited:
+                continue
+
+            visited.add(curr)
+            for out in adj[curr]:
+                temp = w + adj[curr][out]
+                if temp < dist[out]:
+                    dist[out] = temp
+                    heappush(heap, (temp, out))
+
+        dist = sorted(dist.values(), key = lambda x:x)[-1]
+        return dist if dist != float('inf') else -1
+        
 ```
 
 
