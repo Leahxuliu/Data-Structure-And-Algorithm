@@ -72,3 +72,34 @@ class Solution:
         to_delete = set(to_delete)
         forest(root, True)
         return self.res
+
+
+# 错误
+class Solution:
+    def delNodes(self, root: TreeNode, to_delete: List[int]) -> List[TreeNode]:
+        if root == None or root.val in to_delete:
+            return[]
+        
+        def findRoots(root, newRoot):
+            if root == None:
+                return
+                
+            # newRoot是True意味着上一个node是delete，现在的root就是新的root
+            # 但是 还需要判读现在的root是否是被删除的root
+            if newRoot:
+                res.append(root)
+            if root.val in to_delete:
+                newRoot = True
+            else:
+                newRoot = False
+            
+            root.left = findRoots(root.left, newRoot)
+            root.right = findRoots(root.right, newRoot)
+            if newRoot:
+                return None
+            return root
+
+        res = []
+        to_delete = set(to_delete)
+        findRoots(root, True)
+        return res

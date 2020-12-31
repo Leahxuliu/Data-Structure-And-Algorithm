@@ -75,26 +75,22 @@ DFS的优化
 
 class Solution:
     def buildTree(self, preorder: List[int], inorder: List[int]) -> TreeNode:
-        def dfs(pre_left,pre_right,in_left,in_right):
-            if len(preorder) == 0:
+        if preorder == []:
+            return None
+        
+        def DFS(pre_start, pre_end, in_start, in_end):
+            if pre_start > pre_end:
                 return None
             
-            root = TreeNode(preorder[0])
-            mid = inorder_info[preorder[0]]
+            temp = preorder[pre_start]
+            root = TreeNode(temp)
+            mid = info[temp]
 
-            # 更新前序遍历、中序遍历边界，然后递归构建左右子树
-            # 我们可以通过“前序和中序个数是相同”这个隐含条件，求出前序左右边界
-            root.left = self.buildTree(pre_left+1,pre_left+1+mid-in_left,in_left,mid)  # 难点
-            root.right = self.buildTree(pre_left+1+mid-in_left,pre_right,mid+1,in_right)
+            # 先写头和尾，不需要改变或者只需要+-1的
+            # 通过len(preorder) = len(inorder)来计算中间值， 即通过in_end - in_start = pre_end - pre_start来计算
+            root.left = DFS(pre_start + 1, pre_start - in_start + mid, in_start, mid - 1)
+            root.right = DFS(pre_start - in_start + mid + 1, pre_end, mid + 1, in_end)
             return root
         
-
-
-        inorder_info = {}
-        for i, each in enumerate(inorder):
-            inorder_info[each] = (i)  # key: node.val, value: index
-        # 这三行可简写成：
-        # inorder_info = {each:i for i, each in enumerate(inorder)}
-
-        root = dfs(0,len(preorder),0,len(inorder))
-        return root
+        info = {each:i for i, each in enumerate(inorder)}
+        return DFS(0, len(preorder) - 1, 0, len(inorder) - 1)

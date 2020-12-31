@@ -32,7 +32,35 @@ corner case: root == None --> 0
            worst O(N)
 '''
 
+'''
+DFS
+自上而下
+'''
+class Solution:
+    def minDepth(self, root: TreeNode) -> int:
+        if root == None:
+            return 0
+        
+        def dfs(root, depth):
+            if root.left == None and root.right == None:
+                return depth + 1
+                
+            l = float('inf')  # 一定要初始，不然return的时候就会报错
+            r = float('inf')
+            if root.left:
+                l = dfs(root.left, depth + 1)
+            if root.right:
+                r = dfs(root.right, depth + 1)
 
+            return min(l, r)
+        
+        return dfs(root, 0)
+
+
+'''
+DFS
+找到所有的depth的情况
+'''
 class Solution:
     def minDepth(self, root: TreeNode) -> int:
 
@@ -57,9 +85,9 @@ class Solution:
         return min(all_depth)
                 
 '''
-解题思路1 -- 优化
-    1. DFS
-    2. 直接找到最小值
+DFS
+直接找到最小值
+函数返回值是最小值
 
 复杂度
     Time: O(N)

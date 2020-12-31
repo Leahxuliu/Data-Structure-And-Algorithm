@@ -24,23 +24,45 @@ corner case:
 '''
 
 class Solution:
-    def permute(self, nums):
-        res = []
-        temp = []
-        
-        def backtrack(res, temp):
-            if len(nums) == len(temp):
-                res.append(temp[:])
-                return res
-            
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        if nums == []:
+            return []
+
+        def backtracking(per):
+            if len(per) == len(nums):
+                res.append(per[:])
+                return
+
             for i in nums:
-                if i not in temp:
-                    temp.append(i)
-                    backtrack(res, temp)
-                    temp.pop()
+                if i not in per:
+                    per.append(i)
+                    backtracking(per)
+                    per.pop()
+            
+            return 
         
-        backtrack(res, temp)
+        res = []
+        backtracking([])
         return res
 
-x = Solution()
-print(x.permute([1,2,3]))
+
+# DFS
+class Solution:
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        if nums == []:
+            return []
+
+        def DFS(per):
+            if len(per) == len(nums):
+                res.append(per[:])
+
+            for i in nums:
+                if i not in per:
+                    per.append(i)
+                    DFS(per[:])
+            
+            return 
+        
+        res = []
+        DFS([])
+        return res

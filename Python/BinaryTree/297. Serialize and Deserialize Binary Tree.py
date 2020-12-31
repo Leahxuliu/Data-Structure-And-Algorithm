@@ -28,7 +28,7 @@ class Codec:
         """
         data = data.split(',')
         def constructor(data):
-            val = data.pop(0)
+            val = int(data.pop(0))
             if val == 'None':
                 return None
             

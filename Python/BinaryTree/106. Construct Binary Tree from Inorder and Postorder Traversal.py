@@ -52,30 +52,27 @@ class Solution:
 把inorder放入字典
 减少遍历次数
 
-易错点
-root.left = helper(iL, mid, pL, pR-iR+mid)
-root.right = helper(mid+1, iR, pR-iR+mid, pR-1)
-思路见笔记本
-注意： （iL, iR, pL, pR) 指的是 index / index+1==len / index / index+1==len
+先写头和尾，不需要改变或者只需要+-1的
+通过len(preorder) = len(inorder)来计算中间值， 即通过in_end - in_start = post_end - post_start来计算
 '''
 
 
 class Solution:
     def buildTree(self, inorder: List[int], postorder: List[int]) -> TreeNode:
-        def helper(iL, iR, pL, pR):
-            if iL==iR:
+        if inorder == []:
+            return None
+        
+        def DFS(in_start, in_end, post_start, post_end):
+            if in_start > in_end:
                 return None
-            root = TreeNode(postorder[pR-1])
-            print(root.val)
-            mid = info[postorder[pR-1]]
+                
+            temp = postorder[post_end]
+            root = TreeNode(temp)
+            mid = inorder.index(temp)
 
-            root.left = helper(iL, mid, pL, pR-iR+mid)
-            root.right = helper(mid+1, iR, pR-iR+mid, pR-1)
+            root.left = DFS(in_start, mid - 1, post_start, mid - 1 - in_start + post_start)
+            root.right = DFS(mid + 1, in_end, mid - 1 - in_start + post_start + 1,post_end - 1)
             return root
         
-        info = {each_val:i for i, each_val in enumerate(inorder)}
-
-        root = helper(0, len(inorder), 0, len(postorder))
-        
-        return root
-
+        info = {each:i for i, each in enumerate(inorder)}
+        return DFS(0, len(inorder) - 1, 0, len(postorder) - 1)

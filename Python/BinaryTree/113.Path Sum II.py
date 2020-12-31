@@ -13,25 +13,6 @@ Given a binary tree and a sum, find all root-to-leaf paths where each path's sum
 
 3. 题目类型：
 BT，路径和
-
-4. 输出输入
-input: treenode, sum(int)
-output: list[[int]]
-corner case: root == None
-
-5. 解题思路
-    1. DFS
-    2. 在path sum.py的基础上，加helper函数
-    3. helper函数里面的结束条件：
-        结束条件 1：如果当前节点是空的，则返回。
-        结束条件 2：如果是叶子，那么如果剩余的 sum 等于当前叶子的值，则找到满足条件的路径，返回
-
-    
-    1. BFS
-    2. 用deque来存储root，rum， path
-    3. while之前用path_all来存储结果
-    难点，怎么加path
-
 '''
 
 import constructTree
@@ -44,52 +25,81 @@ class TreeNode:
         self.right = None
 
 
+# BFS
+from collections import deque
 class Solution:
-    # 方法一
-    def pathSum(self, root: TreeNode, sum: int):
-        # helper函数
-        def search(root, sum, path):
-            if root == None:
-                return
-            if root.left == None and root.right == None and sum == root.val:
-                    path.append(root.val)
-                    path_all.append(path)
-                    
-            search(root.left, sum-root.val, path+[root.val])   # 不用写return
-            search(root.right, sum-root.val, path+[root.val])
-
-                    
-        path = []
-        path_all = []
-        search(root, sum, path)
-        return path_all
-
-    
-
-    # 方法二
-    def pathSum2(self, root, sum):
+    def pathSum(self, root: TreeNode, sum: int) -> List[List[int]]:
         if root == None:
             return []
         
-        path = []
-        path_all = []
+        all_path = []
         queue = deque()
-        queue.append([root, sum, path])
-        
+        queue.append([root, [], sum])
+
         while queue:
-            node, sum, path = queue.popleft()
-            sum -= node.val
+            node, path, sum = queue.popleft()
             path.append(node.val)
+            sum -= node.val
+            if node.left == None and node.right == None and sum == 0:
+                all_path.append(path[:])
             
-            if node.left == None and node.right == None:
-                if sum == 0:
-                    path_all.append(path)
             if node.left != None:
-                queue.append([node.left, sum, path[:]])  # 注意！！！不管之后path怎么变,这里的path都不变
+                queue.append([node.left, path[:], sum])
             if node.right != None:
-                queue.append([node.right, sum, path[:]])
-                
-        return path_all
+                queue.append([node.right, path[:], sum])
+        
+        return all_path
+
+# DFS 
+class Solution:
+    def pathSum(self, root: TreeNode, sum: int) -> List[List[int]]:
+        if root == None:
+            return []
+        
+        def findAllPath(root, path, sum):
+            path.append(root.val)
+            sum -= root.val
+            if root.left == None and root.right == None:
+                if sum == 0:
+                    all_path.append(path[:])
+                return 
+            
+            if root.left != None:
+                findAllPath(root.left, path[:], sum)
+            if root.right != None:
+                findAllPath(root.right, path[:], sum)
+
+
+        all_path = []
+        findAllPath(root, [], sum)
+        return all_path
+
+
+# Backtracking 
+# Time O(N)
+
+class Solution:
+    def pathSum(self, root: TreeNode, sum: int) -> List[List[int]]:
+        if root == None:
+            return []
+
+        def Backtracking(root, path, sum):
+            path.append(root.val)
+            sum -= root.val
+            if root.left == None and root.right == None and sum == 0:
+                all_path.append(path[:])
+
+            if root.left != None:
+                Backtracking(root.left, path, sum)
+            if root.right != None:
+                Backtracking(root.right, path, sum)
+
+            sum += path[-1]
+            path.pop()
+        
+        all_path = []
+        Backtracking(root, [], sum)
+        return all_path
 
 
 
