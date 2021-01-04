@@ -47,3 +47,28 @@ class Solution:
             temp = []
         
         return res
+
+
+# heap + greedy
+# heap里面放现在正在使用的会议室的结束时间
+# 新会议开始的时候，是否有老的会议已经结束
+from heapq import *
+class Solution:
+    def minMeetingRooms(self, intervals: List[List[int]]) -> int:
+        if intervals == [] or intervals == [[]]:
+            return 0
+
+        intervals = sorted(intervals, key = lambda x:x[0])
+        end_heap = [intervals[0][1]]
+        res = 1
+        
+        for start, end in intervals[1:]:
+            pre_end = heappop(end_heap)
+            if start >= pre_end:
+                heappush(end_heap, end)
+            else:
+                heappush(end_heap, pre_end)
+                heappush(end_heap, end)
+                res = max(res, len(end_heap))
+        
+        return res

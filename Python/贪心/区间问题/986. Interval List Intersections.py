@@ -13,6 +13,44 @@ Time: O(N)
 Space: O(1)
 '''
 
+
+# 分3种情况，一前一后，有交集（pointer移动end在前的），一后一前
+
+class Solution:
+    def intervalIntersection(self, A: List[List[int]], B: List[List[int]]) -> List[List[int]]:
+        if A == [] or B == []:
+            return []
+        
+        i = 0
+        j = 0
+        res = []
+
+        while i < len(A) and j < len(B):
+            s1, e1 = A[i]
+            s2, e2 = B[j]
+
+            # A前 B后 无交集
+            if e1 < s2:
+                i += 1
+            
+            # 有交集（pointer移动end在前的）
+            elif e1 >= s2 and s1 <= e2:
+                res.append([max(s1, s2), min(e1, e2)])
+                if e1 < e2:
+                    i += 1
+                elif e1 > e2:
+                    j += 1
+                else:
+                    i += 1
+                    j += 1
+            
+            # A后 B前 无交集
+            else:
+                j += 1
+        
+        return res
+
+
 class Solution:
     def intervalIntersection(self, A: List[List[int]], B: List[List[int]]) -> List[List[int]]:
         n = len(A)

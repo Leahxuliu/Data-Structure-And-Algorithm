@@ -54,6 +54,7 @@ class Solution:
 
             res = 0
             sumPath += root.val
+            # res = prefix[sum - sumPath] 错 是找差值
             res = prefix[sumPath - sum]
             
             prefix[sumPath] += 1

@@ -380,6 +380,7 @@ class Solution:
     * 考虑函数的返回值
   * 类似DP
     * dfs(left)的结果，dfs(right)的结果，当前root.value --> 新的结果
+    * 比如53题，可用动态规划，分而治之
   * 遍历方向是postorder
 
 * 自上而下
@@ -873,6 +874,7 @@ class Solution:
             if len(per) == len(nums):
                 res.append(per[:])
 
+            # for i in range(start, len(nums))是错的，因为比如[1,2,3]第一个值选的是2，只能选2之后的值，是错误的，1就选不到了
             for i in nums:
                 if i not in per:
                     per.append(i)
@@ -961,10 +963,6 @@ class Solution:
 
 
 
-
-
-
-
 ### 1.6.2 组合
 
 * 77
@@ -976,7 +974,24 @@ class Solution:
   * 例：从1到4里面选择2个数
     - [[1,2],[1,3],[1,4],[2,3],[2,4],[3,4]]
 
-
+```python
+class Solution:
+    def combine(self, n: int, k: int) -> List[List[int]]:
+        def backtracking(start, comb):
+            if len(comb) == k:
+                res.append(comb[:])
+                return
+            
+            for i in range(start, n + 1):
+                comb.append(i)
+                backtracking(i + 1, comb)
+                comb.pop()
+            return
+        
+        res = []
+        backtracking(1, [])
+        return res
+```
 
 ### 1.6.3 子集
 
@@ -992,6 +1007,28 @@ class Solution:
       - 比如[1,2,3] --> [[],[1],[1,2],[1,2,3],[1,3],[2],[2,3],[3]]
     - 有重复数
       - 比如[1,2,2] --> [[],[1],[1,2],[1,2,2],[2],[2,2]]
+
+```python
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        if nums == []:
+            return []
+
+        def backtracking(start, sub):
+            res.append(sub[:])
+
+            for i in range(start, len(nums)):
+                sub.append(nums[i])
+                backtracking(i + 1, sub)
+                sub.pop()
+            return
+        
+        res = []
+        backtracking(0, [])
+        return res
+```
+
+
 
 
 

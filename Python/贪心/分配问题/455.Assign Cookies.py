@@ -22,10 +22,11 @@ corner case:
 
 '''
 
-# 像贪心的写法
+# 贪心 + two point
+# 时间复杂度 O(min(m, n))
 class Solution:
     def findContentChildren(self, g: List[int], s: List[int]) -> int:
-        if g == None or s == None:
+        if g == [] or s == []:
             return 
         
         g.sort()
@@ -36,7 +37,6 @@ class Solution:
         
         while i < len(g) and j < len(s):
             if s[j] >= g[i]:  # 关键点，不仅仅是等于的时候 
-                # 题目the minimum size of a cookie that the child will be content with
                 res += 1
                 i += 1
                 j += 1
@@ -46,6 +46,8 @@ class Solution:
 
 
 # 像greedy模版的写法
+# 时间复杂度高
+# 时间复杂度 O(max(m, n))
 class Solution:
     def findContentChildren(self, g: List[int], s: List[int]) -> int:
         if s == [] or g == []:

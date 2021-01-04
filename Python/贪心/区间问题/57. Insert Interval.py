@@ -2,7 +2,29 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2020/06/21
 
+
+# 同56
+# 时间复杂度 O(nlogn)
+class Solution:
+    def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
+        
+        
+        intervals.append(newInterval)
+        intervals = sorted(intervals, key = lambda x:x[0])
+        res = [intervals[0]]
+
+        for start, end in intervals[1:]:
+            temp = res[-1][1]
+            if start <= temp:
+                res[-1][1] = max(end, temp)
+            else:
+                res.append([start, end])
+        return res
+
+
 '''
+优化 区间的排序部分
+
 greedy
 1. 在区间 newInterval 之前开始的区间全部添加到输出中
 2. 将 newInterval 添加到输出中
