@@ -39,46 +39,47 @@ corner case: None, 最小值比target大，最大值要比target小
 '''
 
 class Solution:
-    def searchRange(self, nums, target):
-        if not nums:  # corner case
+    def searchRange(self, nums: List[int], target: int) -> List[int]:
+        if nums == []:
             return [-1, -1]
+        # 如果没有这些条件， [2,2]，8就会报错，因为l会out of range
+        if nums[0] > target:
+            return [-1, -1]
+        if nums[-1] < target:
+            return [-1, -1]
+        
+        def findFirst(target, start):
+            l = start
+            r = len(nums) - 1
 
-        if target < nums[0] or target > nums[-1]:
+            while l <= r:
+                mid = l + (r - l) // 2
+                if nums[mid] >= target:  # 继续往右边找
+                    r = mid - 1
+                else:
+                    l = mid + 1
+            return l if nums[l] == target else -1  # 返回l，易错
+
+        def findLast(target, start):
+            l = start
+            r = len(nums) - 1
+
+            while l <= r:
+                mid = l + (r - l) // 2
+                if nums[mid] <= target:
+                    l = mid + 1
+                else:
+                    r = mid - 1
+            return r if nums[r] == target else -1
+        
+        first = findFirst(target, 0)
+        print(first)
+        if first == -1:
             return [-1, -1]
-        
-        first = self.findFirst(nums, target)
-        last = self.findLast(nums, target)
+        last = findLast(target, first)
         return [first, last]
-        
-    def findFirst(self, nums, target):
-        l, r = 0, len(nums) - 1
-        while l <= r:
-            mid  = l + (r - l) // 2
-            if nums[mid] == target:
-                r = mid - 1
-            elif nums[mid] > target:
-                r = mid - 1
-            elif nums[mid] < target:
-                l = mid + 1
-        if nums[l] == target:
-            return l
-        else:
-            return -1
-                
-    def findLast(self, nums, target):
-        l, r = 0, len(nums) - 1
-        while l <= r:
-            mid  = l + (r - l) // 2
-            if nums[mid] == target:
-                l = mid + 1
-            elif nums[mid] > target:
-                r = mid - 1
-            elif nums[mid] < target:
-                l = mid + 1
-        if nums[r] == target:
-            return r
-        else:
-            return -1
+
+
 
 x = Solution()
 print(x.searchRange([5,7,7,8,8,10], 8))

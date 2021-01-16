@@ -48,6 +48,17 @@ class Solution:
                 if numbers[i] + numbers[j] == target:
                     return [i+1, j+1]
 
+# dict
+class Solution:
+    def twoSum(self, numbers: List[int], target: int) -> List[int]:
+        info = {}
+        for i, n in enumerate(numbers):
+            diff = target - n 
+            if diff in info:
+                return [info[diff] + 1, i + 1]
+            info[n] = i
+        return [-1, -1]
+
 
 '''
 方法2
@@ -77,30 +88,50 @@ class Solution:
                             l = mid + 1
 
 '''
+Two point
+优化
+'''
+class Solution:
+    def twoSum(self, numbers: List[int], target: int) -> List[int]:
+        i = 0
+        j = len(numbers) - 1
+
+        while i < j:
+            Sum = numbers[i] + numbers[j]
+            if Sum == target:
+                return [i + 1, j + 1]
+            if Sum < target:
+                i += 1
+            else:
+                j -= 1
+
+'''
 方法三
 '''
 class Solution:
     def twoSum(self, numbers: List[int], target: int) -> List[int]:
-        if numbers == None:
-            return []
-        
-        def find(target, arr):
-            l, r = 0, len(arr) - 1
+        def find(target, start):
+            l = start
+            r = len(numbers) - 1
+
             while l <= r:
-                mid = l + (r - l)//2
-                if target == arr[mid]:
+                mid = l + (r - l) // 2
+                if numbers[mid] == target:
                     return mid
-                elif target > arr[mid]:
-                    l = mid + 1
-                elif target < arr[mid]:
+                if numbers[mid] > target:
                     r = mid - 1
+                else:
+                    l = mid + 1
             return -1
+
         
-        for i in range(len(numbers) - 1):
-            new_T = target - numbers[i]
-            index = find(new_T, numbers[i+1:])
+        for i, n in enumerate(numbers):
+            diff = target - n 
+            index = find(diff, i + 1)
             if index != -1:
-                return [i+1, (i+1+index+1)]
+                return [i + 1, index + 1]
+
+
 
 
 x = Solution()

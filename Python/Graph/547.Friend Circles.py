@@ -92,6 +92,7 @@ class Solution:
         def dfs(index):
             visited[index] = 1
 
+            # for j in range(index): 错误 因为这题相当于无向图，只到index的话 相当于有向图
             for j in range(len(M)):
                 if M[index][j] == 1 and visited[j] == 0:
                     dfs(j)
@@ -192,10 +193,24 @@ class Solution:
         times = 0
         
         def find(i):
+            while i != gT[i]:
+                gT[i] = gT[gT[i]]
+                i = gT[i]
+            return i
+        '''
+        def find(i):
             if i == gT[i]:
                 return i
             else:
-                return find(gT[i])
+                return find(gT[gT[i]])
+        
+        def find(i):
+            if i == gT[i]:
+                return i
+            else:
+                gT[i] = find(gT[i])
+                return gT[i]
+        '''
         
         for i in range(m):
             for j in range(i+1, m):

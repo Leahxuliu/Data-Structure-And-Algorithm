@@ -591,11 +591,24 @@ class Solution:
             return n
         
         def find(i):
-            if gT[i] == i:
+            while i != gT[i]:
+                gT[i] = gT[gT[i]]
+                i = gT[i]
+            return i
+        '''
+        def find(i):
+            if i == gT[i]:
                 return i
             else:
-                return find(gT[i])
-
+                return find(gT[gT[i]])
+        
+        def find(i):
+            if i == gT[i]:
+                return i
+            else:
+                gT[i] = find(gT[i])
+                return gT[i]
+        '''
         count = 0
         gT = [x for x in range(n)]
         rank = [1] * n
@@ -615,7 +628,24 @@ class Solution:
         return False
 ```
 
+* 如果需要使用groupTag来判断i与j是否相连，需要吧gT再扫一遍
 
+  * 参考[5650. Minimize Hamming Distance After Swap Operations](https://leetcode-cn.com/problems/minimize-hamming-distance-after-swap-operations/)
+
+  ```python
+  for i in range(len(gT)):
+     gT[i] = root(i)
+  ```
+
+  ```python
+  info = collections.defaultdict(list)
+  for i in range(len(gT)):
+     r = root(i)
+     gT[i] = r
+     info[r].append(i)
+  ```
+
+  
 
 **In java**
 
@@ -646,7 +676,7 @@ class Solution:
             if gT[i] == i:
                 return i
             else:
-                return find(gT[i])
+                return find(gT[gT[i]])
 
         count = 0
         gT = [x for x in range(n)]
@@ -1413,5 +1443,177 @@ class MySolution:
                             queue.append([r, c + 1])  # 向左走一格
                             visited[r][c + 1] = 1
         return
+```
+
+
+
+
+
+# 4. 错题
+
+## 4.1 399. Evaluate Division
+
+```python
+
+from collections import defaultdict
+class Solution:
+    def calcEquation(self, equations: List[List[str]], values: List[float], queries: List[List[str]]) -> List[float]:
+        graph = defaultdict(dict)
+
+        for i, (a, b) in enumerate(equations):
+            graph[a][b] = values[i]
+            graph[b][a] = 1 / values[i]
+        
+        # 错误
+        '''
+        [["x1","x2"],["x2","x3"],["x3","x4"],["x4","x5"]]
+        [3.0,4.0,5.0,6.0]
+        [["x2","x4"]]
+
+        输入答案是None
+        因为x2 -> x1 -> x2, 这里x2已经被访问过，就直接跳出循环
+        return None
+        '''
+        def count(a, b, val):
+            if a not in graph or b not in graph:
+                return -1
+            if a == b:
+                return val
+                   
+            visited.add(a)
+            for i in graph[a]:
+                if i not in visited:
+                    return count(i, b, val * graph[a][i])
+                  
+        # 错误
+        '''
+        [["x1","x2"],["x2","x3"],["x3","x4"],["x4","x5"]]
+        [3.0,4.0,5.0,6.0]
+        [["x2","x4"]]
+
+        输入答案是-5
+        因为x2 -> x1 -> x2, 这里x2已经被访问过，val = -1
+        x3 -> x4 是5
+        答案就是-1 * 5
+        '''
+        def count(a, b, val):
+            if a not in graph or b not in graph:
+                return -1
+            if a == b:
+                return val
+            if a in visited:
+                return -1
+                   
+            visited.add(a)
+            for i in graph[a]:
+                val = count(i, b, val * graph[a][i])
+                if val != -1:
+                    return val
+            return -1
+          
+        # 错误
+        '''
+        改变了本层的val
+        '''
+        def count(a, b):
+            if a not in graph or b not in graph:
+                return -1
+            if a == b:
+                return -1
+            
+            queue = deque()
+            queue.append((a, -1))
+            visited.add(a)
+
+            while queue:
+                curr, val = queue.popleft()
+                for out in graph[curr]:
+                    if out not in visited:
+                        # 错误
+                        '''
+                        改变了本层的val
+                        '''
+                        val = val * graph[curr][out]
+                        if out == b:
+                            return val
+                        queue.append((out, val))
+            return -1
+
+        
+        
+        res = []
+        for a, b in queries:
+            visited = set()
+            res.append(count(a, b, 1))
+        return res
+```
+
+```python
+# 正确
+# DFS
+        def count(a, b):
+            if a not in graph or b not in graph:
+                return -1.0
+            if a == b:
+                return 1.0
+            if a in visited:
+                return -1.0
+                   
+            visited.add(a)
+            for i in graph[a]:
+                val = count(i, b)
+                if val != -1.0:
+                    return val * graph[a][i]
+            return -1.0
+          
+# BFS          
+      def count(self, graph, i, j):
+        queue = deque()
+        visited = set()
+        queue.append([i, 1.0])
+        
+        while queue:
+            node, multi = queue.popleft()
+            if node == j:
+                return multi
+                
+            visited.add(node)
+            for elem in graph[node]:
+                if elem not in visited:
+                    #multi = multi * graph[node][elem]  
+                    # 易错点 相乘不能写在这！每一个点对应一个相乘结果，如果写在这，就是累计了！！！ 注意注意！！！
+                    queue.append([elem, multi * graph[node][elem]])
+        return -1.0  # 不能不写！ 因为可能存在好几个群
+```
+
+
+
+## 547. Number of Provinces
+
+* matrix表示朋友圈
+* 用DFS或者BFS的时候
+  * 遍历每一个点（i），然后再遍历每一个点j，看i，j是否相连，相连就继续遍历
+
+```python
+           def dfs(index):
+            visited[index] = 1
+
+            # for j in range(index): 错误 因为这题相当于无向图，只到index的话 相当于有向图
+            for j in range(len(M)):  # 易错
+                if M[index][j] == 1 and visited[j] == 0:
+                    dfs(j)
+```
+
+* 用union find的时候，以下就可以，因为只需要连接一次
+  * i，j一对对connect
+  * 遍历的是pairs
+
+```python
+for i in range(m):
+   for j in range(i+1, m):
+      
+或者
+for i in range(m):
+   for j in range(i):
 ```
 

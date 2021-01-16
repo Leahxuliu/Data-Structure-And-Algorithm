@@ -3,79 +3,35 @@
 # @Time    : 2020/07/16
 
 '''
-Method - Two pointer
-1. len(nums1) + len(nums2), find the median [med]
-2. set two pointers i, j at 0(nums1), 0(nums2)
-3. if nums1 <= nums2, move i, i+=1
-    else, move j, j+=1
-4. repeat step3 until move med steps
-
-Time: O((m + n) / 2) 不符合题意
+brout force
+use the two pointers to sort + choose the midian one
+time complexity: O(M + N)
 '''
-
-import math
 class Solution:
     def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
-        n1 = len(nums1)
-        n2 = len(nums2)
-        
-        med = math.ceil((n1 + n2) / 2)
-                
         i = 0
         j = 0
-        step = 0
-        res = 0
 
-        while i < n1 and j < n2 and step < med:
+        new_nums = []
+        n = len(nums1) + len(nums2)
+        m = n // 2 + 1
+
+        while i < len(nums1) and j < len(nums2) and m > 0:
             if nums1[i] <= nums2[j]:
-                res = nums1[i]
+                new_nums.append(nums1[i])
                 i += 1
-                step += 1
             else:
-                res = nums2[j]
+                new_nums.append(nums2[j])
                 j += 1
-                step += 1
-                
-        if (n1 + n2) % 2 == 1:
-            
-            if step == med:
-                return res
-            else:
-                while i < n1 and step < med:
-                    res = nums1[i]
-                    i += 1
-                    step += 1
-                while j < n2 and step < med:
-                    res = nums2[j]
-                    j += 1
-                    step += 1
-                return res
-        
-        else:
-            if step == med:
-                if i < n1 and j < n2:
-                    if nums1[i] <= nums2[j]:
-                        return (float(res) + float(nums1[i])) / 2
-                    else:
-                        return (float(res) + float(nums2[j])) / 2
-                elif i < n1:
-                    return (float(res) + float(nums1[i])) / 2
-                else:
-                    return (float(res) + float(nums2[j])) / 2
-            else:
-                while i < n1 and step < med:
-                    res = nums1[i]
-                    i += 1
-                    step += 1
-                while j < n2 and step < med:
-                    res = nums2[j]
-                    j += 1
-                    step += 1
+            m -= 1
 
-                if i < n1:
-                    return (float(res) + float(nums1[i])) / 2
-                else:
-                    return (float(res) + float(nums2[j])) / 2
+        # 千万不能忘 易错！！！！
+        if i < len(nums1):
+            new_nums += nums1[i:i + m]
+        else:
+            new_nums += nums2[j:j + m]
+
+        return float(new_nums[-1]) if n % 2 == 1 else (new_nums[-1] + new_nums[-2]) / 2.0
 
 
 """

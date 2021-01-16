@@ -82,3 +82,35 @@ class Solution:
 
 x = Solution()
 print(x.calcEquation([['x1','x2'],['x2','x3'],['x3','x4'],['x4','x5']],[3.0,4.0,5.0,6.0],[['x2','x4']]))
+
+
+
+from collections import defaultdict
+class Solution:
+    def calcEquation(self, equations: List[List[str]], values: List[float], queries: List[List[str]]) -> List[float]:
+        graph = defaultdict(dict)
+
+        for i, (a, b) in enumerate(equations):
+            graph[a][b] = values[i]
+            graph[b][a] = 1 / values[i]
+        
+        def count(a, b):
+            if a not in graph or b not in graph:
+                return -1.0
+            if a == b:
+                return 1.0
+            if a in visited:
+                return -1.0
+                   
+            visited.add(a)
+            for i in graph[a]:
+                val = count(i, b)
+                if val != -1.0:
+                    return val * graph[a][i]
+            return -1.0
+        
+        res = []
+        for a, b in queries:
+            visited = set()
+            res.append(count(a, b))
+        return res

@@ -23,36 +23,16 @@
 # https://www.youtube.com/watch?v=VNbkzsnllsU
 
 class Solution:
-    def largestRectangleArea(self, heights):
-        
-        heights.append(0)
-        stack = [-1]
-        ans = 0
-        for i in range(len(heights)):
-            while heights[i] < heights[stack[-1]]:
-                h = heights[stack.pop()]
-                w = i - stack[-1] - 1  # 难点，i是后面短的位置，stack[-1]是前面短的位置，所以改宽度是后面短的位置-前面短的位置 -1
-                ans = max(ans, h * w)
-            stack.append(i)
-        heights.pop()
-        return ans
-
-x = Solution()
-print(x.largestRectangleArea([2,1,5,6,2,3]))
-
-
-class Solution:
     def largestRectangleArea(self, heights: List[int]) -> int:
+        if heights == []:
+            return 0
+        
         heights.append(0)
         stack = [-1]
-        largest = 0
-        
-        for i in range(len(heights)):
-            while heights[i] < heights[stack[-1]]:
+        res = 0
+        for i, each in enumerate(heights):
+            while each < heights[stack[-1]]:
                 h = heights[stack.pop()]
-                w = i - stack[-1] - 1
-                largest = max(largest, h * w)
-            
+                res = max((i - stack[-1] - 1) * h, res)  # 难点，i是后面短的位置，stack[-1]是前面短的位置，所以改宽度是后面短的位置-前面短的位置 -1
             stack.append(i)
-        
-        return largest
+        return res
