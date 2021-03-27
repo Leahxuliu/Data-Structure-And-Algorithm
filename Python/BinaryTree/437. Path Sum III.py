@@ -45,24 +45,28 @@ DFS + prefix
 from collections import defaultdict
 class Solution:
     def pathSum(self, root: TreeNode, sum: int) -> int:
-        if not root:
+        if root == None:
             return 0
-        
-        def dfs(root, sumPath):            
-            if root == None:
-                return 0
 
-            res = 0
-            sumPath += root.val
-            # res = prefix[sum - sumPath] 错 是找差值
-            res = prefix[sumPath - sum]
+        def findPath(root, sumPath):
+            '''
+            travesal the tree and count the sumPath
+            '''
+            if root == None:
+                return 
             
+            sumPath += root.val
+            self.res += prefix[sumPath - sum]
             prefix[sumPath] += 1
-            res += dfs(root.left, sumPath)
-            res += dfs(root.right, sumPath)
+            findPath(root.left, sumPath)
+            findPath(root.right, sumPath)
             prefix[sumPath] -= 1
-            return res
-        
+            return 
+
+        self.res = 0
+        # key is the diff of past sumPath with sumPath; value is the times
+        # current sumPath - some past sumPath = sum
         prefix = defaultdict(int)
         prefix[0] = 1
-        return dfs(root, 0)
+        findPath(root, 0)
+        return self.res 

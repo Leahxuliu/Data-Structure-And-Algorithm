@@ -26,3 +26,48 @@ corner case:
     
 
 '''
+
+class Solution:
+    def insertIntoBST(self, root: TreeNode, val: int) -> TreeNode:
+        if root == None:
+            return TreeNode(val)
+        
+        def insert(root):
+            if root == None:
+                return TreeNode(val)
+            
+            if root.val < val:
+                root.right = insert(root.right)
+            else:
+                root.left = insert(root.left)
+
+            return root
+                    
+        insert(root)
+        return root
+
+
+from collections import deque
+class Solution:
+    def insertIntoBST(self, root: TreeNode, val: int) -> TreeNode:
+        if root == None:
+            return TreeNode(val)
+        
+        queue = deque()
+        queue.append(root)
+        while queue:
+            node = queue.popleft()
+
+            if node.val < val:
+                if node.right:
+                    queue.append(node.right)
+                else:
+                    node.right = TreeNode(val)
+                    break
+            else:
+                if node.left:
+                    queue.append(node.left)
+                else:
+                    node.left = TreeNode(val)
+                    break
+        return root

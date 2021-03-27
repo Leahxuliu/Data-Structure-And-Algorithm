@@ -134,4 +134,50 @@ class Solution:
         
              
         
-             
+    '''
+把每一个条件写成一个def
+'''
+class Solution:
+    def myAtoi(self, s: str) -> int:
+        if s == '':
+            return 0
+        
+        # ignore the leading whitespace 
+        def remove_whitespace(s):
+            start = 0
+            for i in range(len(s)):
+                if s[i] != ' ':
+                    start = i
+                    break
+            return start
+
+        # check if the number is negative or positive
+        def check(start):
+            if s[start] == '-':
+                return -1, start + 1
+            elif s[start] == '+':
+                return 1, start + 1
+            return 1, start
+
+        # string to integer
+        def change(start):
+            res = ''
+            for i in range(start, len(s)):
+                if s[i].isdigit() == False:
+                    break
+                res += s[i]
+            return int(res) if res != '' else 0
+
+        start = remove_whitespace(s)
+        flag, start = check(start)
+        res = change(start)
+
+        res = flag * res
+        if res < -1 * 2 ** 31:
+            return -1 * 2 ** 31
+        elif res > 2 ** 31 - 1:
+            return 2 ** 31 - 1
+        else:
+            return res
+
+        

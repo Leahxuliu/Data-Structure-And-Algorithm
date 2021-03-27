@@ -55,3 +55,5 @@ class Solution(object):
                     times += 1
 
         return sum(lst)
+
+        

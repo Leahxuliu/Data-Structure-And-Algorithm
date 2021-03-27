@@ -119,3 +119,48 @@ d.neighbors = [a, c]
 
 x = Solution()
 print(x.cloneGraph(a))
+
+
+'''
+traversal * 2
+1. traversal given graph, make new nodes, and store them into dictionary
+2. traversal given graph again, connect each node 
+'''
+class Solution:
+    def cloneGraph(self, node: 'Node') -> 'Node':
+        # corner case
+        if node == None:
+            return 
+        if node.neighbors == None:
+            return Node(node.val)
+        
+        def traversal(node):
+            if node.val in info:
+                return 
+
+            info[node.val] = Node(node.val)
+            visited[node.val] = 0
+            for out in node.neighbors:
+                traversal(out)
+
+            return
+        
+        def connect(node):
+            if visited[node.val] == 1:
+                return 
+            
+            visited[node.val] = 1
+            for out in node.neighbors:
+                info[node.val].neighbors.append(info[out.val])
+                connect(out)
+            return 
+
+        # make new nodes
+        info = {}
+        visited = {}
+        traversal(node)
+        
+        # connect nodes
+        connect(node)
+
+        return info[node.val]

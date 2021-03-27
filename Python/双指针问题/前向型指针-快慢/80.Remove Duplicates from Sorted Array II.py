@@ -63,3 +63,37 @@ class Solution:
                 j += 1
                 count = 1
         return i + 1
+
+
+'''
+不能超过两个，不包括两个
+双指针
+slow指针表示可以放的前一个位置
+fast去找下一个与slow指针所在位置不同的值
+
+　　　1,　1,　1,　2,　2,　3
+     s  s 
+         f   f   
+'''
+
+class Solution:
+    def removeDuplicates(self, nums: List[int]) -> int:
+        if len(nums) < 3:
+            return len(nums)
+        
+        slow = 0
+        fast = 1
+        count = 1
+        while fast < len(nums):
+            if nums[slow] == nums[fast]:
+                if count == 1:
+                    slow += 1
+                    nums[slow], nums[fast] = nums[fast], nums[slow]
+                    count += 1
+                fast += 1
+            else:
+                slow += 1
+                nums[slow], nums[fast] = nums[fast], nums[slow]
+                fast += 1
+                count = 1
+        return slow + 1

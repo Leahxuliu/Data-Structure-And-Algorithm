@@ -114,7 +114,55 @@ class Solution:
 '''
 DFS
 [-1,0,1]
+若一个component有环，但不代表从该点strat一定会遇到环
+visited[node] == 0 --> return
+所以只有不在环内的点才能到达visited[node] = 1
+
 '''
+
+class Solution:
+    def eventualSafeNodes(self, graph: List[List[int]]) -> List[int]:
+        if graph == [[]] or graph == []:
+            return []
+        
+        def find(node):
+            '''
+            traversal the graph and put nodes which not in circle into res 
+            param: node (int)
+            return : True means circle
+            '''
+            if visited[node] == 1:
+                return False
+            if visited[node] == 0:
+                return True
+            
+            visited[node] = 0
+            for out in graph[node]:
+                if find(out):
+                    return True
+            
+            visited[node] = 1
+            #level.append(node)
+            #temp.append(node)
+            res.append(node)
+            return False
+        
+        n = len(graph)
+        visited = [-1] * n
+
+        res = []
+        #temp = []
+        for i in range(n):
+            if visited[i] == -1:
+                # level = []
+                # if find(i) == False:
+                #     res.extend(level)
+                # print(i, visited, level)
+                find(i)
+        #print(temp)
+        res.sort()
+        return res
+
 
 class Solution:
     def eventualSafeNodes(self, graph):
