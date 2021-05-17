@@ -79,3 +79,24 @@ class Solution:
             return False
         
         return self.isBalanced(root.left) and self.isBalanced(root.right)
+
+
+class Solution:
+    def isBalanced(self, root: TreeNode) -> bool:
+        if root == None:
+            return True
+        
+        def check(root):
+            nonlocal res
+            if root == None:
+                return 0
+            
+            l = check(root.left)
+            r = check(root.right)
+            if abs(l - r) > 1 and res:
+                res = False
+            return max(l, r) + 1
+
+        res = True
+        check(root)
+        return res

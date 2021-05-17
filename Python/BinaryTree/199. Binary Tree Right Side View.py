@@ -39,6 +39,10 @@ class Solution:
 #         self.left = None
 #         self.right = None
 
+'''
+
+先遍历left的话，就是最后一个遇到的就是
+'''
 class Solution:
     def rightSideView(self, root: TreeNode) -> List[int]:
         if root == None:
@@ -59,3 +63,35 @@ class Solution:
         self.res = []
         traversal(root, 0)
         return self.res
+
+
+
+'''
+递归
+递归参数里面带depth
+先访问right节点，这样所遇到的新一层的第一个node就是想要的节点
+'''
+class Solution:
+    def rightSideView(self, root: TreeNode) -> List[int]:
+        if root == None:
+            return []
+        
+        def find(root, depth):
+            if root == None:
+                return 
+            
+            depth += 1
+            if len(nodes) >= depth:  # >= !!!不是==
+                pass
+            else:
+                nodes.append([root.val])
+                res.append(root.val)
+            
+            find(root.right, depth)
+            find(root.left, depth)
+            return 
+        
+        nodes = []
+        res = []
+        find(root, 0)
+        return res

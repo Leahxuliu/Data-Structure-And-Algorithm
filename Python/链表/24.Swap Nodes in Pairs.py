@@ -1,23 +1,35 @@
-# !/usr/bin/python
-# -*- coding: utf-8 -*-
-# @Time    : 2020/05/05  
-# @Author  : XU Liu
-# @FileName: 24.Swap Nodes in Pairs.py
+'''
+Method - 
+Steps:
+    1. set dummy and pre = ListNode(0)
+    2. traverse listnodes from linked list
+    3. 
+       
 
 '''
-1. 题目要求：
 
 
-2. 理解：
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def swapPairs(self, head: ListNode) -> ListNode:
+        if head == None:
+            return 
+        
+        dummy = pre = ListNode(0)
+        dummy.next = head
 
-
-3. 输出输入以及边界条件：
-input: 
-output: 
-corner case: 
-
-4. 解题思路
-    
-5. 空间时间复杂度
-
-'''
+        while head and head.next:
+            firstNode = head
+            secondNode = head.next
+            
+            pre.next = secondNode
+            firstNode.next = secondNode.next
+            secondNode.next = firstNode
+            
+            pre = firstNode
+            head = firstNode.next
+        return dummy.next

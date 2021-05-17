@@ -84,6 +84,26 @@ class Stock:
 X = Stock()
 print(X.maxProfit([7,1,5,3,6,4]))
 
+
+# 空间优化
+
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        if prices == []:
+            return 0
+        
+        n = len(prices)
+        # dp = [[0] * (n + 1) for _ in range(2)]
+
+        dp_1 = float('-inf')
+        dp_0 = 0
+
+        for i in range(1, n + 1):
+            dp_0 = max(dp_0, dp_1 + prices[i - 1])
+            dp_1 = max(dp_1, -prices[i - 1])
+        
+        return dp_0
+
 '''
 状态转移方程，新状态只和相邻的一个状态有关，其实不用整个 dp 数组，
 只需要一个变量储存相邻的那个状态就足够了，这样可以把空间复杂度降到 O(1)
@@ -112,5 +132,4 @@ class Stock:
         def dfs(i):
             if 
 '''
-
 

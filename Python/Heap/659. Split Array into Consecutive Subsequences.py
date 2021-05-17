@@ -1,8 +1,45 @@
 '''
-dict + heap
-核心： 到x时构成的序列长度（存储数组中的每个数字作为结尾的子序列的数量），x值有几个，就一定有几段序列
 
-时间复杂度：O(n \log n)O(nlogn)，其中 nn 是数组的长度。
+还是贪心算法，从头扫描，如果能接着上一个序列，就在上个序列后添加当前值，如果不行，前插一行继续下一个数字。
+例如 2， 3， 4， 4， 5， 5， 6
+顺序如下
+[[2]]
+[[2, 3]]
+[[2, 3, 4]]
+4不能后接，前插一行
+[[4], [2, 3, 4]]
+[[4, 5], [2, 3, 4]]
+[[4, 5], [2, 3, 4, 5]]
+[[4, 5, 6], [2, 3, 4, 5]]
+最后比较是否所有序列长度大于等于3
+'''
+
+class Solution:
+    def isPossible(self, nums: List[int]) -> bool:
+        res = []
+        for n in nums:
+            for v in res:
+                if n == v[-1] + 1:
+                    v.append(n)
+                    break
+            else:
+                res.insert(0, [n])
+
+        return all([len(v) >= 3 for v in res])
+
+
+
+
+'''
+dict + heap
+1. 用dictionary来记录分段情况，key是integer，value（list， 因为有多种）是以key这个intger为end的段里有几个数
+2. 遍历nums （i）
+    a. 如果dict[i-1] == [], 也就是意味着i只能开新段，所以这一段是1 （ 注意要用heap来加入，这样才能确保下次pop的时候是最小值）
+    b. 如果dict[i-1]是存在的，那么选择最短的一段往上加
+3. 遍历dictionary里面的value，看是否大于3
+
+时间复杂度：O(nlogn)，其中 n = nn 是数组的长度。
+
 '''
 
 from collections import defaultdict
@@ -13,23 +50,20 @@ class Solution:
         count = defaultdict(list)
 
         for i in nums:
-            #if i - 1 not in count: wrong 
-            # 因为这样的话，i-1已经被使用完，清空后，虽然是[]但是是有这个key的
-            # 比如[1,2,3,4,5,5,6] 第二个5的时候就会报错
             if count[i - 1] == []:
-                # count[i] = [1]  wrong
-                # 比如[1,2,3,3,4,5] 第二个3的时候，2里面是空的，3里面有一个3，这个时候是要往3里面append 
                 heappush(count[i], 1)
-            
+                # count[i].append(1)  wrong count[i][0]不是最小值
+
             else:
-                #print(count)
                 min_len = heappop(count[i - 1])
-                count[i].append(min_len + 1)
+                # count[i].append(min_len + 1)
+                heappush(count[i], min_len + 1)
 
         for each in count.values():
             if len(each) > 0 and each[0] < 3:
                 return False
         return True
+
 
 '''
 时间复杂度：O(n)
@@ -47,7 +81,7 @@ from collections import Counter, defaultdict
 class Solution:
     def isPossible(self, nums: List[int]) -> bool:
         countMap = Counter(nums)
-        seqCount = Counter()  # 这里用Counter要比defaultdict要好，因为可以不管是否有这个key
+        seqCount = Counter()  # 这里用Counter要比defaultdict要好，因为是按照value大小排好序的
 
         for x in nums:
             if countMap[x] == 0:

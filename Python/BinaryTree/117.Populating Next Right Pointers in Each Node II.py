@@ -114,3 +114,34 @@ class Solution:
 '''
 preorder 变换先right再left
 '''
+
+
+'''
+创建dummy node
+space O(1)
+'''
+
+class Solution:
+    def connect(self, root: 'Node') -> 'Node':
+        if root == None:
+            return root
+        
+        dummy = Node()
+        pre = dummy
+        curr = root
+
+        while curr:
+            if curr.left:
+                pre.next = curr.left
+                pre = pre.next
+            if curr.right:
+                pre.next = curr.right
+                pre = pre.next
+            
+            curr = curr.next
+
+            if curr == None:
+                curr = dummy.next
+                dummy.next = None
+                pre = dummy
+        return root

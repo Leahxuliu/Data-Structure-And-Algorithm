@@ -10,6 +10,7 @@ class Solution:
             self.path.append((i - si, j - sj))
             for newi, newj in [[i + 1, j], [i - 1, j], [i, j + 1], [i, j - 1]]:
                 DFS(si, sj, newi, newj)
+            return 
 
         n = len(grid)
         m = len(grid[0])
